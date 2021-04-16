@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WhoAreYou_Xamarin.Views.OptionView"
+             NavigationPage.HasNavigationBar="False">
+    <ContentPage.Content>
+        <StackLayout Orientation="Vertical"
+                     VerticalOptions="StartAndExpand"
+                     HorizontalOptions="StartAndExpand"
+                     Margin="30">
+
+            <StackLayout Orientation="Horizontal"
+                         Margin="20">
+                <Switch VerticalOptions="CenterAndExpand"/>
+                <Label Text="열릴 때 알람"
+                       VerticalOptions="CenterAndExpand"/>
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal"
+                         Margin="20">
+                <Switch VerticalOptions="CenterAndExpand"/>
+                <Label Text="닫힐 때 알람"
+                       VerticalOptions="CenterAndExpand"/>
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal"
+                         Margin="20">
+                <Switch VerticalOptions="CenterAndExpand"/>
+                <Label Text="사진 전송하기"
+                       VerticalOptions="CenterAndExpand"/>
+            </StackLayout>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

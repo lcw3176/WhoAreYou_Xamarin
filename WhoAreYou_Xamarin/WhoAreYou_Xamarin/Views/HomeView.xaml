@@ -1,8 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="WhoAreYou_Xamarin.Views.HomeView"    
-             xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
-             android:TabbedPage.ToolbarPlacement="Bottom">
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            x:Class="WhoAreYou_Xamarin.Views.HomeView"    
+            xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+            android:TabbedPage.ToolbarPlacement="Bottom"
+            xmlns:views="clr-namespace:WhoAreYou_Xamarin.Views">
+
+    <NavigationPage Title="기기 목록"
+                    IconImageSource="list_icon.png">
+        <x:Arguments>
+            <views:MachinesView/>
+        </x:Arguments>
+    </NavigationPage>
+    
+    <NavigationPage Title="기록 보기"
+                    IconImageSource="document_icon.png">
+        <x:Arguments>
+            <views:LogView/>
+        </x:Arguments>
+    </NavigationPage>
+
+    <NavigationPage Title="옵션 설정"
+                    IconImageSource="setting_icon.png">
+        <x:Arguments>
+            <views:OptionView/>
+        </x:Arguments>
+    </NavigationPage>
     
 </TabbedPage>

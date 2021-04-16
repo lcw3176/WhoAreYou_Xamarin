@@ -5,23 +5,38 @@
     <Grid BackgroundColor="White">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="6*"/>
-            <RowDefinition Height="4*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
+
+        <Label Text="Who Are You?"
+               Grid.Row="0"
+               FontSize="Title"
+               FontAttributes="Bold"
+               TextColor="Black"
+               VerticalOptions="CenterAndExpand"
+               HorizontalOptions="CenterAndExpand"/>
 
         <Image Source="bell.png"
                Aspect="AspectFit"
-               Grid.Row="0"
+               Grid.Row="1"
                Margin="20"/>
 
         <StackLayout Margin="20"
-                     Grid.Row="1">
+                     Grid.Row="2">
 
-            <Entry Placeholder="Phone Numeber"
+            <Entry Placeholder="ID"
                    HorizontalOptions="FillAndExpand"
                    Margin="5"
-                   Text="{Binding phoneNumber}"/>
+                   Text="{Binding Id}"/>
 
+            <Entry Placeholder="Password"
+                   HorizontalOptions="FillAndExpand"
+                   Margin="5"
+                   IsPassword="True"
+                   x:Name="password"/>
+            
 
             <StackLayout Orientation="Horizontal">
 
@@ -36,25 +51,30 @@
 
             </StackLayout>
 
-            <Button Text="SIGN IN" 
+            <Button Text="접속하기" 
                     BackgroundColor="DarkCyan" 
                     TextColor="White"
                     CornerRadius="30"
                     Margin="20"
-                    Command="{Binding SigninCommand}"/>
+                    Command="{Binding LoginCommand}"
+                    CommandParameter="{x:Reference password}"/>
 
             <StackLayout Orientation="Horizontal" 
                          HorizontalOptions="CenterAndExpand"
-                         VerticalOptions="EndAndExpand">
+                         VerticalOptions="CenterAndExpand">
 
-                <Label Text="Still Not Connected ?" 
+                <Label Text="회원이 아니신가요 ?" 
                        TextColor="DarkGray" 
-                       FontSize="Small"/>
+                       FontSize="Small"
+                       VerticalTextAlignment="Center"/>
 
-                <Label Text="Sign Up" 
-                       TextColor="Gray" 
-                       FontAttributes="Bold"
-                       FontSize="Small"/>
+                <Button Text="회원가입" 
+                        TextColor="Gray" 
+                        FontAttributes="Bold"
+                        FontSize="Small"
+                        BorderWidth="0"
+                        BackgroundColor="Transparent"
+                        Command="{Binding GoToSignUpCommand}"/>
 
             </StackLayout>
 

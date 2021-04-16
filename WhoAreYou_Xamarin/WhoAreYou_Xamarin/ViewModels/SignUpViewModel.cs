@@ -1,20 +1,19 @@
 ﻿using System.Windows.Input;
 using WhoAreYou_Xamarin.Models;
-using WhoAreYou_Xamarin.Services.Dependencies;
 using WhoAreYou_Xamarin.Services;
+using WhoAreYou_Xamarin.Services.Dependencies;
 using WhoAreYou_Xamarin.Views;
 using Xamarin.Forms;
 
 namespace WhoAreYou_Xamarin.ViewModels
 {
-    class LoginViewModel : BaseViewModel
+    class SignUpViewModel : BaseViewModel
     {
         private string id = string.Empty;
-        private WebService webService = new WebService();
+        public ICommand GoToLogInCommand { get; set; }
+        public ICommand SignUpCommand { get; set; }
 
-        public ICommand LoginCommand { get; set; }
-        public ICommand GoToSignUpCommand { get; set; }
-        public string Id
+        public string Id 
         {
             get { return id; }
             set
@@ -24,40 +23,41 @@ namespace WhoAreYou_Xamarin.ViewModels
             }
         }
 
-
-        public LoginViewModel()
+        private WebService webService = new WebService();
+        
+        public SignUpViewModel()
         {
-            LoginCommand = new Command(LoginExecuteMethod);
-            GoToSignUpCommand = new Command(GoToSignUpExecuteMethod);
+            GoToLogInCommand = new Command(GoToLogInExecuteMethod);
+            SignUpCommand = new Command(SignUpExecuteMethod);
         }
 
+
         /// <summary>
-        /// 회원가입 페이지로 이동
+        /// 로그인 페이지로 이동
         /// </summary>
         /// <param name="obj"></param>
-        private void GoToSignUpExecuteMethod(object obj)
+        private void GoToLogInExecuteMethod(object obj)
         {
-            App.Current.MainPage = new SignUpView();
+            App.Current.MainPage = new LoginView();
         }
 
         /// <summary>
-        /// 로그인 시도
+        /// 회원가입 시도
         /// </summary>
         /// <param name="obj">패스워드 Entry 객체</param>
-        private void LoginExecuteMethod(object obj)
+        private void SignUpExecuteMethod(object obj)
         {
             string pw = (obj as Entry).Text;
 
-            if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(pw))
+            if(string.IsNullOrEmpty(id) || string.IsNullOrEmpty(pw))
             {
                 DependencyService.Get<IToastMessage>().Alert(ErrorMessage.emptyError);
             }
 
-            if (webService.Send(null))
+            if(webService.Send(null))
             {
-                App.Current.MainPage = new HomeView();
+                App.Current.MainPage = new LoginView();
             }
-            
         }
     }
 }
