@@ -4,6 +4,7 @@ using WhoAreYou_Xamarin.Services.Dependencies;
 using WhoAreYou_Xamarin.Services;
 using WhoAreYou_Xamarin.Views;
 using Xamarin.Forms;
+using WhoAreYou_Xamarin.Models.Url;
 
 namespace WhoAreYou_Xamarin.ViewModels
 {
@@ -11,6 +12,7 @@ namespace WhoAreYou_Xamarin.ViewModels
     {
         private string id = string.Empty;
         private WebService webService = new WebService();
+        private JsonService jsonService = new JsonService();
 
         public ICommand LoginCommand { get; set; }
         public ICommand GoToSignUpCommand { get; set; }
@@ -44,7 +46,7 @@ namespace WhoAreYou_Xamarin.ViewModels
         /// 로그인 시도
         /// </summary>
         /// <param name="obj">패스워드 Entry 객체</param>
-        private void LoginExecuteMethod(object obj)
+        private async void LoginExecuteMethod(object obj)
         {
             string pw = (obj as Entry).Text;
 
@@ -53,9 +55,17 @@ namespace WhoAreYou_Xamarin.ViewModels
                 DependencyService.Get<IToastMessage>().Alert(ErrorMessage.emptyError);
             }
 
-            if (webService.Send(null))
+            string jsonString = await webService.SendToGet(Urls.signIn.ToString(), id, pw);
+
+            if(int.Parse(jsonService.ReadJson(jsonString, "code").ToString()) == 200)
             {
                 App.Current.MainPage = new HomeView();
+            }
+
+            else
+            {
+                // 테스트용 코드
+                DependencyService.Get<IToastMessage>().Alert(jsonService.ReadJson(jsonString, "result").ToString());
             }
             
         }

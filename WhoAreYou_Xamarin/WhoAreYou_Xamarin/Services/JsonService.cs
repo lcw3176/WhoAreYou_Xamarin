@@ -7,6 +7,20 @@ namespace WhoAreYou_Xamarin.Services
 {
     class JsonService
     {
+
+        public string MakeJson(Dictionary<string, object> value)
+        {
+            JObject json = new JObject();
+
+            foreach(var i in value)
+            {
+                json.Add(new JProperty(i.Key, i.Value));
+            }
+
+            return json.ToString();
+        }
+
+
         public object ReadJson(object json)
         {
             return null;

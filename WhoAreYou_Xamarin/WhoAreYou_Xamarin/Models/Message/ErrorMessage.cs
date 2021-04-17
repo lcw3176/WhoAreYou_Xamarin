@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WhoAreYou_Xamarin.Models
+﻿namespace WhoAreYou_Xamarin.Models
 {
     static class ErrorMessage
     {

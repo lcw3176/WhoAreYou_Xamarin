@@ -1,8 +1,9 @@
 ﻿using Android.Widget;
+using WhoAreYou_Xamarin.Droid.Services.Dependencies;
 using WhoAreYou_Xamarin.Services.Dependencies;
 using Xamarin.Forms;
 
-[assembly: Dependency(typeof(IToastMessage))]
+[assembly: Dependency(typeof(ToastMessage))]
 namespace WhoAreYou_Xamarin.Droid.Services.Dependencies
 {
     class ToastMessage : IToastMessage

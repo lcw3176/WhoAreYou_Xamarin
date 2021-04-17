@@ -1,5 +1,7 @@
-﻿using System.Windows.Input;
+﻿using System.Collections.Generic;
+using System.Windows.Input;
 using WhoAreYou_Xamarin.Models;
+using WhoAreYou_Xamarin.Models.Url;
 using WhoAreYou_Xamarin.Services;
 using WhoAreYou_Xamarin.Services.Dependencies;
 using WhoAreYou_Xamarin.Views;
@@ -24,6 +26,8 @@ namespace WhoAreYou_Xamarin.ViewModels
         }
 
         private WebService webService = new WebService();
+        private JsonService jsonService = new JsonService();
+
         
         public SignUpViewModel()
         {
@@ -45,7 +49,7 @@ namespace WhoAreYou_Xamarin.ViewModels
         /// 회원가입 시도
         /// </summary>
         /// <param name="obj">패스워드 Entry 객체</param>
-        private void SignUpExecuteMethod(object obj)
+        private async void SignUpExecuteMethod(object obj)
         {
             string pw = (obj as Entry).Text;
 
@@ -54,10 +58,22 @@ namespace WhoAreYou_Xamarin.ViewModels
                 DependencyService.Get<IToastMessage>().Alert(ErrorMessage.emptyError);
             }
 
-            if(webService.Send(null))
+            Dictionary<string, string> value = new Dictionary<string, string>();
+            value.Add("email", id);
+            value.Add("password", pw);
+
+            string result = await webService.SendToPost(Urls.signUp, value);
+
+            if(int.Parse(jsonService.ReadJson(result, "code").ToString()) != 200)
             {
-                App.Current.MainPage = new LoginView();
+                string reason = jsonService.ReadJson(result, "result").ToString();
+                DependencyService.Get<IToastMessage>().Alert(reason);
+            
+                return;
             }
+
+            DependencyService.Get<IToastMessage>().Alert(SuccessMessage.successSignup);
+            App.Current.MainPage = new LoginView();
         }
     }
 }
