@@ -1,7 +1,5 @@
-﻿using System;
-using WhoAreYou_Xamarin.Views;
+﻿using WhoAreYou_Xamarin.Views;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace WhoAreYou_Xamarin
 {

@@ -15,42 +15,58 @@ namespace WhoAreYou_Xamarin.Services
 
         public async Task<string> SendToGet(string address, params string[] values)
         {
-            StringBuilder url = new StringBuilder();
-            url.Append(address.ToString());
-
-            foreach (var i in values)
+            try
             {
-                url.Append("/");
-                url.Append(i);
-            }
+                StringBuilder url = new StringBuilder();
+                url.Append(address.ToString());
 
-            using (HttpClient http = new HttpClient())
-            {
-                using (HttpResponseMessage response = await http.GetAsync(url.ToString()))
+                foreach (var i in values)
                 {
-                    using (HttpContent content = response.Content)
+                    url.Append("/");
+                    url.Append(i);
+                }
+
+                using (HttpClient http = new HttpClient())
+                {
+                    using (HttpResponseMessage response = await http.GetAsync(url.ToString()))
                     {
-                        return await content.ReadAsStringAsync();
+                        using (HttpContent content = response.Content)
+                        {
+                            return await content.ReadAsStringAsync();
+                        }
                     }
                 }
             }
+
+            catch
+            {
+                return null;
+            }
+            
 
         }
 
         public async Task<string> SendToPost(string url, Dictionary<string, string> values)
         {
-
-            using (HttpClient http = new HttpClient())
+            try
             {
-                var encodedContent = new FormUrlEncodedContent(values);
-
-                using (HttpResponseMessage response = await http.PostAsync(url, encodedContent))
+                using (HttpClient http = new HttpClient())
                 {
-                    using (HttpContent content = response.Content)
+                    var encodedContent = new FormUrlEncodedContent(values);
+
+                    using (HttpResponseMessage response = await http.PostAsync(url, encodedContent))
                     {
-                        return await content.ReadAsStringAsync();
+                        using (HttpContent content = response.Content)
+                        {
+                            return await content.ReadAsStringAsync();
+                        }
                     }
                 }
+            }
+
+            catch
+            {
+                return null;
             }
 
         }

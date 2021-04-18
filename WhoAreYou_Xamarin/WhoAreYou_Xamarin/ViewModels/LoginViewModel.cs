@@ -5,6 +5,8 @@ using WhoAreYou_Xamarin.Services;
 using WhoAreYou_Xamarin.Views;
 using Xamarin.Forms;
 using WhoAreYou_Xamarin.Models.Url;
+using WhoAreYou_Xamarin.Models.Property;
+using System;
 
 namespace WhoAreYou_Xamarin.ViewModels
 {
@@ -13,6 +15,7 @@ namespace WhoAreYou_Xamarin.ViewModels
         private string id = string.Empty;
         private WebService webService = new WebService();
         private JsonService jsonService = new JsonService();
+        private PropertyService propertyService = new PropertyService();
 
         public ICommand LoginCommand { get; set; }
         public ICommand GoToSignUpCommand { get; set; }
@@ -26,11 +29,30 @@ namespace WhoAreYou_Xamarin.ViewModels
             }
         }
 
+        public bool rememberCheck { get; set; }
+
 
         public LoginViewModel()
         {
             LoginCommand = new Command(LoginExecuteMethod);
             GoToSignUpCommand = new Command(GoToSignUpExecuteMethod);
+
+            object isRemember = propertyService.Read(LocalProperties.isRememberInfo);
+
+            if(isRemember == null)
+            {
+                return;
+            }
+
+            if (bool.Parse(isRemember.ToString()))
+            {
+                Id = propertyService.Read(ServerProperties.email).ToString();
+                Entry entry = new Entry();
+                entry.Text = propertyService.Read(ServerProperties.password).ToString();
+
+                LoginExecuteMethod(entry);
+            }
+
         }
 
         /// <summary>
@@ -52,21 +74,35 @@ namespace WhoAreYou_Xamarin.ViewModels
 
             if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(pw))
             {
-                DependencyService.Get<IToastMessage>().Alert(ErrorMessage.emptyError);
+                DependencyService.Get<IToastMessage>().Alert(ErrorMessage.empty);
+                
+                return;
             }
 
-            string jsonString = await webService.SendToGet(Urls.signIn.ToString(), id, pw);
+            string jsonString = await webService.SendToGet(Urls.SIGNIN.ToString(), id, pw);
 
-            if(int.Parse(jsonService.ReadJson(jsonString, "code").ToString()) == 200)
+            if(string.IsNullOrEmpty(jsonString))
             {
-                App.Current.MainPage = new HomeView();
+                DependencyService.Get<IToastMessage>().Alert(ErrorMessage.network);
+                
+                return;
             }
 
-            else
+            if (int.Parse(jsonService.ReadJson(jsonString, ServerProperties.code)) == ServerProperties.success)
             {
-                // 테스트용 코드
-                DependencyService.Get<IToastMessage>().Alert(jsonService.ReadJson(jsonString, "result").ToString());
+                string token = jsonService.ReadJson(jsonString, ServerProperties.result);
+                propertyService.Write(LocalProperties.token, token);
+
+                if(rememberCheck)
+                {
+                    propertyService.Write(ServerProperties.email, id);
+                    propertyService.Write(ServerProperties.password, pw);
+                    propertyService.Write(LocalProperties.isRememberInfo, rememberCheck);
+                }
+
+                App.Current.MainPage = new HomeView();  
             }
+
             
         }
     }

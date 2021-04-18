@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Input;
 using WhoAreYou_Xamarin.Models;
+using WhoAreYou_Xamarin.Models.Property;
 using WhoAreYou_Xamarin.Models.Url;
 using WhoAreYou_Xamarin.Services;
 using WhoAreYou_Xamarin.Services.Dependencies;
@@ -55,25 +56,37 @@ namespace WhoAreYou_Xamarin.ViewModels
 
             if(string.IsNullOrEmpty(id) || string.IsNullOrEmpty(pw))
             {
-                DependencyService.Get<IToastMessage>().Alert(ErrorMessage.emptyError);
-            }
-
-            Dictionary<string, string> value = new Dictionary<string, string>();
-            value.Add("email", id);
-            value.Add("password", pw);
-
-            string result = await webService.SendToPost(Urls.signUp, value);
-
-            if(int.Parse(jsonService.ReadJson(result, "code").ToString()) != 200)
-            {
-                string reason = jsonService.ReadJson(result, "result").ToString();
-                DependencyService.Get<IToastMessage>().Alert(reason);
-            
+                DependencyService.Get<IToastMessage>().Alert(ErrorMessage.empty);
+                
                 return;
             }
 
-            DependencyService.Get<IToastMessage>().Alert(SuccessMessage.successSignup);
-            App.Current.MainPage = new LoginView();
+            Dictionary<string, string> value = new Dictionary<string, string>();
+            value.Add(ServerProperties.email, id);
+            value.Add(ServerProperties.password, pw);
+
+            string result = await webService.SendToPost(Urls.SIGNUP, value);
+
+
+            if (string.IsNullOrEmpty(result))
+            {
+                DependencyService.Get<IToastMessage>().Alert(ErrorMessage.network);
+
+                return;
+            }
+
+
+            if(int.Parse(jsonService.ReadJson(result, ServerProperties.code)) == ServerProperties.success)
+            {
+                DependencyService.Get<IToastMessage>().Alert(SuccessMessage.signUp);
+                App.Current.MainPage = new LoginView();
+            }
+
+            else
+            {
+                DependencyService.Get<IToastMessage>().Alert(ErrorMessage.existUser);
+            }
+
         }
     }
 }

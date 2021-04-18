@@ -40,7 +40,7 @@
 
             <StackLayout Orientation="Horizontal">
 
-                <CheckBox IsChecked="False" 
+                <CheckBox IsChecked="{Binding rememberCheck}" 
                           Color="Black" />
 
                 <Label Text="Remember me" 

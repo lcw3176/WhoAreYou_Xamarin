@@ -6,7 +6,7 @@ namespace WhoAreYou_Xamarin.Models.Url
 {
     public static class Urls
     {
-        public static string signIn = "http://172.30.1.40:8080/signin";
-        public static string signUp = "http://172.30.1.40:8080/signup";
+        public static string SIGNUP, SIGNIN = "http://192.168.137.1:8080/users";
+        public static string LOG = "http://192.168.137.1:8080/auth/logs";
     }
 }

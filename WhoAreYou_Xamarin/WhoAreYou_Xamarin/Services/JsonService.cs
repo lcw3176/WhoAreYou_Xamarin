@@ -26,13 +26,13 @@ namespace WhoAreYou_Xamarin.Services
             return null;
         }
 
-        public object ReadJson(object json, string keyName)
+        public string ReadJson(object json, string keyName)
         {
             foreach(var i in JObject.Parse(json.ToString()))
             {
                 if(i.Key == keyName)
                 {
-                    return i.Value;
+                    return i.Value.ToString();
                 }
             }
 
