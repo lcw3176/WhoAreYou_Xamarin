@@ -79,7 +79,7 @@ namespace WhoAreYou_Xamarin.ViewModels
                 return;
             }
 
-            string jsonString = await webService.SendToGet(Urls.SIGNIN.ToString(), id, pw);
+            string jsonString = await webService.SendToGet(Urls.SIGNIN, id, pw);
 
             if(string.IsNullOrEmpty(jsonString))
             {
@@ -101,6 +101,11 @@ namespace WhoAreYou_Xamarin.ViewModels
                 }
 
                 App.Current.MainPage = new HomeView();  
+            }
+
+            else
+            {
+                DependencyService.Get<IToastMessage>().Alert(ErrorMessage.notMember);
             }
 
             

@@ -30,6 +30,12 @@
                        VerticalOptions="CenterAndExpand"/>
             </StackLayout>
 
+            <StackLayout Orientation="Horizontal"
+                         Margin="20">
+                <Button Text="로그아웃"
+                        VerticalOptions="CenterAndExpand"
+                        Command="{Binding SignOutCommand}"/>
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
