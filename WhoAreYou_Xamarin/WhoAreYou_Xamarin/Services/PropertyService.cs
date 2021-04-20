@@ -31,5 +31,14 @@ namespace WhoAreYou_Xamarin.Services
                 App.Current.Properties.Add(key, value);
             }
         }
+
+        public void Delete(string key)
+        {
+            if (App.Current.Properties.ContainsKey(key))
+            {
+                App.Current.Properties.Remove(key);
+            }
+
+        }
     }
 }

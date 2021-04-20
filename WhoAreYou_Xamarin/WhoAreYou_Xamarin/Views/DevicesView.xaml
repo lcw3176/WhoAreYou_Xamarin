@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WhoAreYou_Xamarin.Views.DevicesView">
+
+    <ListView ItemsSource="{Binding deviceCollection}">
+        <ListView.RowHeight>
+            <OnPlatform x:TypeArguments="x:Int32">
+                <On Platform="Android">80</On>
+            </OnPlatform>
+        </ListView.RowHeight>
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <StackLayout Orientation="Horizontal"
+                                     VerticalOptions="Center"
+                                     Margin="5">
+                        <Button Text="{Binding index}"
+                                    FontSize="Medium"
+                                    WidthRequest="60"
+                                    BackgroundColor="Transparent"
+                                    BorderWidth="0"
+                                    Command="{Binding SearchCommand}"
+                                    CommandParameter="{Binding index}"/>
+
+                        <StackLayout Orientation="Vertical"
+                                         Margin="2">
+                            <Label Text="{Binding name}"
+                                   FontSize="Micro"/>
+                            <Label Text="{Binding lastLog}"
+                                       FontSize="Small"/>
+                        </StackLayout>
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+</ContentPage>

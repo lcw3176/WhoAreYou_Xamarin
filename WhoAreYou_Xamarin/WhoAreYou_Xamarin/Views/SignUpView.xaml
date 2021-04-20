@@ -10,13 +10,13 @@
             <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
 
-         <Label Text="회원가입"
+        <Label Text="회원가입"
                 Grid.Row="0"
                 FontSize="Large"
                 HorizontalOptions="CenterAndExpand"
                 VerticalOptions="CenterAndExpand"/>
 
-        
+
         <StackLayout Margin="20"
                      Grid.Row="1">
 

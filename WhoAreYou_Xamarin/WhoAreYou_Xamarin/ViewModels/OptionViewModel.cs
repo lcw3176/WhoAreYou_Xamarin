@@ -18,7 +18,7 @@ namespace WhoAreYou_Xamarin.ViewModels
 
         private void SignOutExecuteMethod(object obj)
         {
-            propertyService.Write(LocalProperties.isRememberInfo, false);
+            propertyService.Delete(Property.token);
             App.Current.MainPage = new LoginView();
         }
     }

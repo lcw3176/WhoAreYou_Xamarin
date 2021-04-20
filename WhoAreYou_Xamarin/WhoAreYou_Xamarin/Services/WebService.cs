@@ -8,7 +8,7 @@ namespace WhoAreYou_Xamarin.Services
     class WebService
     {
 
-        public async Task<string> SendToGet(string address, params string[] values)
+        public async Task<string> SendGet(string address, params string[] values)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace WhoAreYou_Xamarin.Services
 
         }
 
-        public async Task<string> SendToGetWithToken(string address, string token, params string[] values)
+        public async Task<string> SendGetWithToken(string address, string token, params string[] values)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace WhoAreYou_Xamarin.Services
 
                 using (HttpClient http = new HttpClient())
                 {
-                    http.DefaultRequestHeaders.Add("W-AUTH-TOKEN", token);
+                    http.DefaultRequestHeaders.Add("X-AUTH-TOKEN", token);
 
                     using (HttpResponseMessage response = await http.GetAsync(url.ToString()))
                     {
@@ -78,7 +78,7 @@ namespace WhoAreYou_Xamarin.Services
 
 
 
-        public async Task<string> SendToPost(string url, Dictionary<string, string> values)
+        public async Task<string> SendPost(string url, Dictionary<string, string> values)
         {
             try
             {

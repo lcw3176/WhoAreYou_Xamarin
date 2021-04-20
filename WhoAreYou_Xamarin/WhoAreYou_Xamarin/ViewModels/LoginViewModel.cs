@@ -6,7 +6,9 @@ using WhoAreYou_Xamarin.Views;
 using Xamarin.Forms;
 using WhoAreYou_Xamarin.Models.Url;
 using WhoAreYou_Xamarin.Models.Property;
+using WhoAreYou_Xamarin.Models.Response;
 using System;
+using System.Threading.Tasks;
 
 namespace WhoAreYou_Xamarin.ViewModels
 {
@@ -29,30 +31,29 @@ namespace WhoAreYou_Xamarin.ViewModels
             }
         }
 
-        public bool rememberCheck { get; set; }
-
 
         public LoginViewModel()
         {
+            Init();
             LoginCommand = new Command(LoginExecuteMethod);
-            GoToSignUpCommand = new Command(GoToSignUpExecuteMethod);
+            GoToSignUpCommand = new Command(GoToSignUpExecuteMethod);            
+        }
 
-            object isRemember = propertyService.Read(LocalProperties.isRememberInfo);
 
-            if(isRemember == null)
+        private async void Init()
+        {
+            object token = propertyService.Read(Property.token);
+
+            if (token != null)
             {
-                return;
+                string result = await webService.SendGet(Urls.AUTHCHECK, token.ToString());
+
+                if (jsonService.ReadJson(result, Response.code) == Response.Code.success.ToString())
+                {
+                    App.Current.MainPage = new HomeView();
+                }
+
             }
-
-            if (bool.Parse(isRemember.ToString()))
-            {
-                Id = propertyService.Read(ServerProperties.email).ToString();
-                Entry entry = new Entry();
-                entry.Text = propertyService.Read(ServerProperties.password).ToString();
-
-                LoginExecuteMethod(entry);
-            }
-
         }
 
         /// <summary>
@@ -79,7 +80,7 @@ namespace WhoAreYou_Xamarin.ViewModels
                 return;
             }
 
-            string jsonString = await webService.SendToGet(Urls.SIGNIN, id, pw);
+            string jsonString = await webService.SendGet(Urls.SIGNIN, id, pw);
 
             if(string.IsNullOrEmpty(jsonString))
             {
@@ -88,17 +89,11 @@ namespace WhoAreYou_Xamarin.ViewModels
                 return;
             }
 
-            if (int.Parse(jsonService.ReadJson(jsonString, ServerProperties.code)) == ServerProperties.success)
+            if (int.Parse(jsonService.ReadJson(jsonString, Response.code)) == Response.Code.success)
             {
-                string token = jsonService.ReadJson(jsonString, ServerProperties.result);
-                propertyService.Write(LocalProperties.token, token);
-
-                if(rememberCheck)
-                {
-                    propertyService.Write(ServerProperties.email, id);
-                    propertyService.Write(ServerProperties.password, pw);
-                    propertyService.Write(LocalProperties.isRememberInfo, rememberCheck);
-                }
+                string token = jsonService.ReadJson(jsonString, Response.result);
+                propertyService.Write(Property.token, token);
+                propertyService.Write(Property.email, id);
 
                 App.Current.MainPage = new HomeView();  
             }

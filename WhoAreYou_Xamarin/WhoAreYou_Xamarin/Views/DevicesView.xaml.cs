@@ -5,12 +5,12 @@ using Xamarin.Forms.Xaml;
 namespace WhoAreYou_Xamarin.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class MachinesView : ContentPage
+    public partial class DevicesView : ContentPage
     {
-        public MachinesView()
+        public DevicesView()
         {
             InitializeComponent();
-            BindingContext = new MachinesViewModel();
+            BindingContext = new DevicesViewModel();
         }
     }
 }

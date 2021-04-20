@@ -9,7 +9,7 @@
     <NavigationPage Title="기기 목록"
                     IconImageSource="list_icon.png">
         <x:Arguments>
-            <views:MachinesView/>
+            <views:DevicesView/>
         </x:Arguments>
     </NavigationPage>
     
