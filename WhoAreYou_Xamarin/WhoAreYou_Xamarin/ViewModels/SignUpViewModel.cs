@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 using WhoAreYou_Xamarin.Models;
 using WhoAreYou_Xamarin.Models.Property;
@@ -61,10 +62,13 @@ namespace WhoAreYou_Xamarin.ViewModels
                 
                 return;
             }
+            EncryptoService encryptoService = new EncryptoService();
+            pw = encryptoService.Generate(pw);
+
 
             Dictionary<string, string> value = new Dictionary<string, string>();
-            value.Add(Property.email, id);
-            value.Add(Property.password, pw);
+            value.Add(Property.User.email, id);
+            value.Add(Property.User.password, pw);
 
             string result = await webService.SendPost(Urls.SIGNUP, value);
 

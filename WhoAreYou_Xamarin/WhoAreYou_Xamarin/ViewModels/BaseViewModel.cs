@@ -1,9 +1,14 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Threading;
 
 namespace WhoAreYou_Xamarin.ViewModels
 {
     class BaseViewModel : INotifyPropertyChanged
     {
+        protected static Queue<string> logQueue = new Queue<string>();
+        protected static ManualResetEvent controller = new ManualResetEvent(false);
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyUpdate(string propertyName)
@@ -13,6 +18,16 @@ namespace WhoAreYou_Xamarin.ViewModels
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
 
+        }
+
+        /// <summary>
+        /// 조회할 기기 이름 등록
+        /// </summary>
+        /// <param name="deviceName"></param>
+        protected void EnqueueLog(string deviceName)
+        {
+            logQueue.Enqueue(deviceName);
+            controller.Set();
         }
     }
 }

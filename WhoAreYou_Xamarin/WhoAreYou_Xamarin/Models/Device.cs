@@ -1,15 +1,13 @@
-﻿namespace WhoAreYou_Xamarin.Models
-{
-    class Device
-    {
-        private string log;
+﻿using System;
+using System.Windows.Input;
 
+namespace WhoAreYou_Xamarin.Models
+{
+    class Devices
+    {
         public int index { get; set; }
         public string name { get; set; }
-        public string lastLog 
-        {
-            get { return log + "분 전"; }
-            set { log = value; }
-        }
+        public ICommand searchLogCommand { get; set; }
+        //public DateTime lastLog { get; set; }
     }
 }

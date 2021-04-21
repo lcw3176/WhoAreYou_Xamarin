@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -68,8 +69,9 @@ namespace WhoAreYou_Xamarin.Services
                 }
             }
 
-            catch
+            catch(Exception ex)
             {
+                Console.WriteLine(ex);
                 return null;
             }
 
@@ -96,8 +98,10 @@ namespace WhoAreYou_Xamarin.Services
                 }
             }
 
-            catch
+            catch(Exception ex)
             {
+                Console.WriteLine("익셉션");
+                Console.WriteLine(ex);
                 return null;
             }
 

@@ -1,38 +1,73 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="WhoAreYou_Xamarin.Views.DevicesView">
+             x:Class="WhoAreYou_Xamarin.Views.DevicesView"
+             NavigationPage.HasNavigationBar="False">
 
-    <ListView ItemsSource="{Binding deviceCollection}">
-        <ListView.RowHeight>
-            <OnPlatform x:TypeArguments="x:Int32">
-                <On Platform="Android">80</On>
-            </OnPlatform>
-        </ListView.RowHeight>
-        <ListView.ItemTemplate>
-            <DataTemplate>
-                <ViewCell>
-                    <StackLayout Orientation="Horizontal"
+    <StackLayout Orientation="Vertical">
+        <ListView ItemsSource="{Binding deviceCollection}">
+            <ListView.RowHeight>
+                <OnPlatform x:TypeArguments="x:Int32">
+                    <On Platform="Android">80</On>
+                </OnPlatform>
+            </ListView.RowHeight>
+            
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal"
                                      VerticalOptions="Center"
                                      Margin="5">
-                        <Button Text="{Binding index}"
+                            <Button Text="{Binding index}"
                                     FontSize="Medium"
                                     WidthRequest="60"
                                     BackgroundColor="Transparent"
                                     BorderWidth="0"
-                                    Command="{Binding SearchCommand}"
-                                    CommandParameter="{Binding index}"/>
+                                    Command="{Binding searchLogCommand}"
+                                    CommandParameter="{Binding name}"/>
 
-                        <StackLayout Orientation="Vertical"
-                                         Margin="2">
                             <Label Text="{Binding name}"
-                                   FontSize="Micro"/>
-                            <Label Text="{Binding lastLog}"
-                                       FontSize="Small"/>
+                                   FontSize="Medium"
+                                   VerticalOptions="CenterAndExpand"/>
+                            
+                            <!--<StackLayout Orientation="Vertical"
+                                         Margin="2">
+                                <Label Text="{Binding name}"
+                                   FontSize="Small"/>-->
+                                <!--<StackLayout Orientation="Horizontal">
+                                    <Label Text="마지막 기록: "
+                                       FontSize="Micro"/>
+                                    <Label Text="{Binding lastLog}"
+                                       FontSize="Micro"/>
+                                </StackLayout>-->
+
+                            <!--</StackLayout>-->
                         </StackLayout>
-                    </StackLayout>
-                </ViewCell>
-            </DataTemplate>
-        </ListView.ItemTemplate>
-    </ListView>
+
+                        <!--<ViewCell.ContextActions>
+                            <MenuItem Text="기록 조회"
+                                      Command="{Binding searchLogCommand}"
+                                      CommandParameter="{Binding name}"/>
+                        </ViewCell.ContextActions>-->
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+
+        <StackLayout Orientation="Horizontal"
+                     VerticalOptions="EndAndExpand"
+                     HorizontalOptions="Center"
+                     Margin="0, 0, 0, 30">
+            <Button Text="기기 추가"
+                    BorderWidth="1"
+                    BorderColor="LightGray"
+                    BackgroundColor="WhiteSmoke"
+                    Command="{Binding addDeviceCommand}"
+                    CornerRadius="20"/>
+        </StackLayout>
+
+    </StackLayout>
+    
+    
 </ContentPage>

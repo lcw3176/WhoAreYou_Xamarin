@@ -1,16 +1,15 @@
-﻿using WhoAreYou_Xamarin.ViewModels;
+﻿
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace WhoAreYou_Xamarin.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class LogView : ContentPage
+    public partial class AddDeviceView : ContentPage
     {
-        public LogView()
+        public AddDeviceView()
         {
             InitializeComponent();
-            BindingContext = new LogViewModel();
         }
     }
 }

@@ -1,12 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+<Shell xmlns="http://xamarin.com/schemas/2014/forms"
             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
             x:Class="WhoAreYou_Xamarin.Views.HomeView"    
-            xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
-            android:TabbedPage.ToolbarPlacement="Bottom"
-            xmlns:views="clr-namespace:WhoAreYou_Xamarin.Views">
+            xmlns:views="clr-namespace:WhoAreYou_Xamarin.Views"
+       Shell.NavBarIsVisible="False">
 
-    <NavigationPage Title="기기 목록"
+    <TabBar>
+        <ShellContent Title="기기 목록"
+                  Icon="list_icon.png">
+            <views:DevicesView/>
+        </ShellContent>
+
+        <ShellContent Title="기록 보기"
+                  Icon="document_icon.png"
+                  Route="viewLog">
+            <views:LogView/>
+        </ShellContent>
+
+        <ShellContent Title="옵션 설정"
+                  Icon="setting_icon.png">
+            <views:OptionView/>
+        </ShellContent>
+    </TabBar>
+
+    <!--<NavigationPage Title="기기 목록"
                     IconImageSource="list_icon.png">
         <x:Arguments>
             <views:DevicesView/>
@@ -14,7 +31,8 @@
     </NavigationPage>
     
     <NavigationPage Title="기록 보기"
-                    IconImageSource="document_icon.png">
+                    IconImageSource="document_icon.png"
+                    Routing.Route="viewLog">
         <x:Arguments>
             <views:LogView/>
         </x:Arguments>
@@ -25,6 +43,6 @@
         <x:Arguments>
             <views:OptionView/>
         </x:Arguments>
-    </NavigationPage>
+    </NavigationPage>-->
     
-</TabbedPage>
+</Shell>

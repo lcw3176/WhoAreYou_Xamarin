@@ -42,7 +42,7 @@ namespace WhoAreYou_Xamarin.ViewModels
 
         private async void Init()
         {
-            object token = propertyService.Read(Property.token);
+            object token = propertyService.Read(Property.User.token);
 
             if (token != null)
             {
@@ -79,7 +79,9 @@ namespace WhoAreYou_Xamarin.ViewModels
                 
                 return;
             }
+            EncryptoService encryptoService = new EncryptoService();
 
+            pw = encryptoService.Generate(pw); 
             string jsonString = await webService.SendGet(Urls.SIGNIN, id, pw);
 
             if(string.IsNullOrEmpty(jsonString))
@@ -92,8 +94,8 @@ namespace WhoAreYou_Xamarin.ViewModels
             if (int.Parse(jsonService.ReadJson(jsonString, Response.code)) == Response.Code.success)
             {
                 string token = jsonService.ReadJson(jsonString, Response.result);
-                propertyService.Write(Property.token, token);
-                propertyService.Write(Property.email, id);
+                propertyService.Write(Property.User.token, token);
+                propertyService.Write(Property.User.email, id);
 
                 App.Current.MainPage = new HomeView();  
             }

@@ -3,11 +3,64 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WhoAreYou_Xamarin.Views.LogView"
              NavigationPage.HasNavigationBar="False">
-    <ContentPage.Content>
-        <StackLayout>
-            <Label Text=""
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+
+    <StackLayout Orientation="Vertical">
+        <StackLayout HorizontalOptions="CenterAndExpand"
+                     VerticalOptions="Start"
+                     Orientation="Horizontal"
+                     Margin="10">
+            <Label Text="{Binding DeviceName}"
+                   FontSize="Medium"/>
         </StackLayout>
-    </ContentPage.Content>
+        <ListView ItemsSource="{Binding logCollection}">
+            <ListView.RowHeight>
+                <OnPlatform x:TypeArguments="x:Int32">
+                    <On Platform="Android">70</On>
+                </OnPlatform>
+            </ListView.RowHeight>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Orientation="Vertical"
+                                         Margin="10">
+
+                            <StackLayout Orientation="Horizontal"
+                                         VerticalOptions="End">
+                                <Label Text="{Binding stateString}"
+                                       FontSize="Micro">
+                                    <Label.Style>
+                                        <Style TargetType="Label">
+                                            <Style.Triggers>
+                                                <DataTrigger TargetType="Label"
+                                                             Binding="{Binding state}"
+                                                             Value="true">
+                                                    <Setter Property="TextColor"
+                                                            Value="Red"/>
+                                                </DataTrigger>
+
+                                                <DataTrigger TargetType="Label"
+                                                             Binding="{Binding state}"
+                                                             Value="false">
+                                                    <Setter Property="TextColor"
+                                                            Value="Blue"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Label.Style>
+                                </Label>
+                            </StackLayout>
+
+                            <StackLayout Orientation="Horizontal">
+                                <!--<Label Text="기록 시간: "
+                                       FontSize="Micro"/>-->
+                                <Label Text="{Binding time}"
+                                       FontSize="Micro"/>
+                            </StackLayout>
+
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
 </ContentPage>

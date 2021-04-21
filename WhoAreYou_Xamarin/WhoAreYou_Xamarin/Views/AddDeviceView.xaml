@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WhoAreYou_Xamarin.Views.AddDeviceView">
+    <ContentPage.Content WidthRequest="50"
+                         HeightRequest="50">
+      <StackLayout>
+          <Label Text="Hello Xamarin.Forms!" />
+      </StackLayout>
+  </ContentPage.Content>
+</ContentPage>
