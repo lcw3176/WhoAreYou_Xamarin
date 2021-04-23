@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using WhoAreYou_Xamarin.ViewModels;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace WhoAreYou_Xamarin.Views
@@ -9,6 +10,7 @@ namespace WhoAreYou_Xamarin.Views
         public HomeView()
         {
             InitializeComponent();
+            BindingContext = new HomeViewModel();
         }
     }
 }

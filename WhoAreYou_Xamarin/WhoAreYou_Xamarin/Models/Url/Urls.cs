@@ -2,7 +2,9 @@
 {
     public static class Urls
     {
-        public static string ip = "172.30.1.34";
+        public static string ip = "172.30.1.40";
+
+        public static string SOCKET = "ws://" + ip + ":8080/auth/socket";
 
         public static string SIGNIN = "http://" + ip + ":8080/users";
         public static string SIGNUP = "http://" + ip + ":8080/users";

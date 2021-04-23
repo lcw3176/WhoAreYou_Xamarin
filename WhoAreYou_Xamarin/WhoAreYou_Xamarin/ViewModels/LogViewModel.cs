@@ -18,6 +18,7 @@ namespace WhoAreYou_Xamarin.ViewModels
         private WebService webService = new WebService();
         private PropertyService propertyService = new PropertyService();
         private JsonService jsonService = new JsonService();
+        private static LogViewModel instance;
 
         public string DeviceName
         {
@@ -29,10 +30,21 @@ namespace WhoAreYou_Xamarin.ViewModels
             }
         }
 
-        public LogViewModel()
+        private LogViewModel()
         {
             Task.Run(() => DequeueLog());
         }
+
+        public static LogViewModel GetInstance()
+        {
+            if(instance == null)
+            {
+                instance = new LogViewModel();
+            }
+
+            return instance;
+        }
+
 
         /// <summary>
         /// 장치명 등록되면 기록 인출
@@ -47,7 +59,7 @@ namespace WhoAreYou_Xamarin.ViewModels
                     {
                         logCollection.Clear();
                         DeviceName = logQueue.Dequeue();
-                        Init(DeviceName);
+                        Init();
                     }
 
                     controller.Reset();
@@ -59,9 +71,11 @@ namespace WhoAreYou_Xamarin.ViewModels
         }
 
 
-        private async void Init(string deviceName)
+        public async void Init()
         {
-            string result = await webService.SendGetWithToken(Urls.LOG, propertyService.Read(Property.User.token).ToString(), deviceName);
+            string token = propertyService.Read(Property.User.token).ToString();
+            string userId = propertyService.Read(Property.User.email).ToString();
+            string result = await webService.SendGetWithToken(Urls.LOG, token, userId, DeviceName);
 
             if (jsonService.ReadJson(result, Response.code) == Response.Code.success.ToString())
             {
@@ -69,7 +83,7 @@ namespace WhoAreYou_Xamarin.ViewModels
                 
                 var stateList = jsonService.ReadJArray(result, Property.Log.state);
                 var timeList = jsonService.ReadJArray(result, Property.Log.time);
-                DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+                DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Local);
 
                 for (int i = 0; i < stateList.Count; i++)
                 {

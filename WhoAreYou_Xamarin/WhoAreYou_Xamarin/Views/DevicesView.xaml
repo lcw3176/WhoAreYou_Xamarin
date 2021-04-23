@@ -20,9 +20,12 @@
                                      Margin="5">
                             <Button Text="{Binding index}"
                                     FontSize="Medium"
-                                    WidthRequest="60"
-                                    BackgroundColor="Transparent"
-                                    BorderWidth="0"
+                                    WidthRequest="50"
+                                    BackgroundColor="WhiteSmoke"
+                                    BorderWidth="1"
+                                    BorderColor="Black"
+                                    CornerRadius="30"
+                                    Margin="10"
                                     Command="{Binding searchLogCommand}"
                                     CommandParameter="{Binding name}"/>
 

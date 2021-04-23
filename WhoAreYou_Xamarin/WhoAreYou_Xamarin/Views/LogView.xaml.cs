@@ -10,7 +10,7 @@ namespace WhoAreYou_Xamarin.Views
         public LogView()
         {
             InitializeComponent();
-            BindingContext = new LogViewModel();
+            BindingContext = LogViewModel.GetInstance();
         }
     }
 }

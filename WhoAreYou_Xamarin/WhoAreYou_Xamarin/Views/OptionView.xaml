@@ -23,12 +23,12 @@
                        VerticalOptions="CenterAndExpand"/>
             </StackLayout>
 
-            <StackLayout Orientation="Horizontal"
+            <!--<StackLayout Orientation="Horizontal"
                          Margin="20">
                 <Switch VerticalOptions="CenterAndExpand"/>
                 <Label Text="사진 전송하기"
                        VerticalOptions="CenterAndExpand"/>
-            </StackLayout>
+            </StackLayout>-->
 
             <StackLayout Orientation="Horizontal"
                          Margin="20">
