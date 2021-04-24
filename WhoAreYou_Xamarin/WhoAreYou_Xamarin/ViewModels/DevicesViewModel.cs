@@ -33,9 +33,10 @@ namespace WhoAreYou_Xamarin.ViewModels
             await Shell.Current.GoToAsync("//viewLog");
         }
 
-        private async void AddDeviceExecuteMethod(object obj)
+        private void AddDeviceExecuteMethod(object obj)
         {
-            await App.Current.MainPage.Navigation.PushModalAsync(new AddDeviceView());
+            SocketService.Test();
+            //await App.Current.MainPage.Navigation.PushModalAsync(new AddDeviceView());
         }
 
 
@@ -51,8 +52,6 @@ namespace WhoAreYou_Xamarin.ViewModels
             {
                 string jarr = jsonService.ReadJson(result, Response.result);
                 var nameList = jsonService.ReadJArray(jarr, Property.Device.name);
-                //var timeList = jsonService.ReadJArray(jarr, Property.Device.time);
-                //DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
                 for (int i = 0; i < nameList.Count; i++)
                 {
@@ -61,8 +60,6 @@ namespace WhoAreYou_Xamarin.ViewModels
                         index = i + 1,
                         name = nameList[i],
                         searchLogCommand = searchLogCommand
-                        //lastLog = dt.AddMilliseconds(double.Parse(timeList[i]))
-                        //            .ToLocalTime()
                     });
                 }
             }
@@ -72,7 +69,6 @@ namespace WhoAreYou_Xamarin.ViewModels
                 deviceCollection.Add(new Devices()
                 {
                     name = "추가된 기기가 없습니다.",
-                    //lastLog = DateTime.Today
                 });
             }
         }

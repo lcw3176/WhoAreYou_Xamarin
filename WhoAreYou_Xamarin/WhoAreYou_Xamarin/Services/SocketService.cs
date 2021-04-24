@@ -3,6 +3,8 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using WhoAreYou_Xamarin.Models.Property;
+using WhoAreYou_Xamarin.Models.Response;
 using WhoAreYou_Xamarin.Models.Url;
 using WhoAreYou_Xamarin.Services.Dependencies;
 using Xamarin.Forms;
@@ -12,6 +14,7 @@ namespace WhoAreYou_Xamarin.Services
     static class SocketService
     {
         private static ClientWebSocket socket = new ClientWebSocket();
+        private static JsonService jsonService = new JsonService();
 
         public static bool IsConnect()
         { 
@@ -55,7 +58,17 @@ namespace WhoAreYou_Xamarin.Services
                     ArraySegment<byte> bytes = new ArraySegment<byte>(new byte[1024]);
 
                     WebSocketReceiveResult result = await socket.ReceiveAsync(bytes, CancellationToken.None);
-                    Console.WriteLine(Encoding.UTF8.GetString(bytes.Array, 0, result.Count));
+                    string values = Encoding.UTF8.GetString(bytes.Array, 0, result.Count);
+
+                    if(jsonService.ReadJson(values, Response.code) == Response.Code.success.ToString())
+                    {
+                        string resultSet = jsonService.ReadJson(values, Response.result);
+                        string deviceName = jsonService.ReadJson(resultSet, Property.Device.name);
+                        bool state = bool.Parse(jsonService.ReadJson(resultSet, Property.Log.state));
+
+                        
+                        DependencyService.Get<IForegroundManager>().Update(deviceName, state);
+                    }
                 }
             }
 
@@ -66,11 +79,15 @@ namespace WhoAreYou_Xamarin.Services
 
         }
 
+        static bool testValue = true;
+
         public async static void Test()
         {
-            
-            ArraySegment<byte> bytes = new ArraySegment<byte>(Encoding.UTF8.GetBytes("서버?"));
+            string token = new PropertyService().Read(Property.User.token).ToString();
+            ArraySegment<byte> bytes = new ArraySegment<byte>(Encoding.UTF8.GetBytes(token + ",무야호," + testValue.ToString()));
             await socket.SendAsync(bytes, WebSocketMessageType.Text, true, CancellationToken.None);
+
+            testValue = !testValue;
         }
     }
 }

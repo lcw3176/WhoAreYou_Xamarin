@@ -4,7 +4,6 @@ using Android.Content;
 using Android.Graphics;
 using Android.OS;
 using WhoAreYou_Xamarin.Droid.Services.Dependencies;
-using WhoAreYou_Xamarin.Models;
 using WhoAreYou_Xamarin.Services.Dependencies;
 
 [assembly: Xamarin.Forms.Dependency(typeof(ForegroudManager))]

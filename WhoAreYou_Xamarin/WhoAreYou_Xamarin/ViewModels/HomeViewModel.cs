@@ -20,8 +20,6 @@ namespace WhoAreYou_Xamarin.ViewModels
                 if (result)
                 {
                     SocketService.StartReceive();
-
-                    SocketService.Test();
                 }
             }
 

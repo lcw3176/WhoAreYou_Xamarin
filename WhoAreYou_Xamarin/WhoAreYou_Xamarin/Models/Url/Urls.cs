@@ -2,7 +2,7 @@
 {
     public static class Urls
     {
-        public static string ip = "172.30.1.40";
+        public static string ip = "172.30.1.18";
 
         public static string SOCKET = "ws://" + ip + ":8080/auth/socket";
 

@@ -8,6 +8,5 @@ namespace WhoAreYou_Xamarin.Models
         public int index { get; set; }
         public string name { get; set; }
         public ICommand searchLogCommand { get; set; }
-        //public DateTime lastLog { get; set; }
     }
 }
