@@ -21,12 +21,12 @@ namespace WhoAreYou_Xamarin
 
         protected override void OnSleep()
         {
-            DependencyService.Get<IForegroundManager>().Start();
+            DependencyService.Get<IForegroundManager>().Update("창문", true);
         }
 
         protected override void OnResume()
         {
-            DependencyService.Get<IForegroundManager>().Stop();
+
         }
     }
 }

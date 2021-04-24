@@ -1,8 +1,10 @@
 ﻿
 using Android.App;
 using Android.Content;
+using Android.Graphics;
 using Android.OS;
 using WhoAreYou_Xamarin.Droid.Services.Dependencies;
+using WhoAreYou_Xamarin.Models;
 using WhoAreYou_Xamarin.Services.Dependencies;
 
 [assembly: Xamarin.Forms.Dependency(typeof(ForegroudManager))]
@@ -10,31 +12,73 @@ namespace WhoAreYou_Xamarin.Droid.Services.Dependencies
 {
     class ForegroudManager : IForegroundManager
     {
+        private int NOTIFICATION_ID = 9000;
+        private const string channelId = "whoareyou";
+        private const string channelName = "whoAreYou";
+        private const string channelDescription = "the default channel for whoareyou";
+        public static ForegroudManager Instance { get; private set; }
 
-        public void Start()
+        private NotificationManager manager;
+
+        public ForegroudManager()
         {
-            Intent intent = new Intent(Application.Context, typeof(ForegroundService));
+            if (Instance == null)
+            {
+                CreateChannel();
+                Instance = this;
+            }
+
+        }
+
+        private void CreateChannel()
+        {
+            manager = (NotificationManager)Application.Context.GetSystemService(Context.NotificationService);
 
             if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
             {
-                Application.Context.StartForegroundService(intent);
+                var channelNameJava = new Java.Lang.String(channelName);
+                var channel = new NotificationChannel(channelId, channelNameJava, NotificationImportance.Default)
+                {
+                    Description = channelDescription
+                };
+
+                channel.SetSound(null, null);
+                channel.EnableVibration(true);
+                manager.CreateNotificationChannel(channel);
             }
+        }
+
+        public void Update(string deviceName, bool isOpen)
+        {
+            string content;
+
+            if(isOpen)
+            {
+                content = deviceName + "(이)가 열렸습니다";
+            }
+
             else
             {
-                Application.Context.StartService(intent);
+                content = deviceName + "(이)가 닫혔습니다";
             }
-        }
 
-        public void Stop()
-        {
-            Intent intent = new Intent(Application.Context, typeof(ForegroundService));
+            Intent defaultIntent = new Intent(Application.Context, typeof(MainActivity));
+            defaultIntent.PutExtra("goToMain", "goToMain");
 
-            Application.Context.StopService(intent);
-        }
+            PendingIntent defaultPendingIntent = PendingIntent.GetActivity(Application.Context, 1, defaultIntent, PendingIntentFlags.UpdateCurrent);
 
-        public void Update(string content)
-        {
-            throw new System.NotImplementedException();
+            var notification = new Notification.Builder(Application.Context, channelId)
+                .SetContentIntent(defaultPendingIntent)
+                .SetSmallIcon(Resource.Drawable.noti_logo)
+                .SetLargeIcon(BitmapFactory.DecodeResource(Application.Context.Resources, Resource.Drawable.bell))
+                .SetContentTitle("장치 작동")
+                .SetContentText(content)
+                .SetShowWhen(true)
+                .Build();
+            
+
+            manager.Notify(NOTIFICATION_ID++, notification);
+
         }
 
     }
