@@ -7,6 +7,8 @@
             public static string email = "email";
             public static string password = "password";
             public static string token = "token";
+            public static string openAlert = "openAlert";
+            public static string closeAlert = "closeAlert";
         }
 
 

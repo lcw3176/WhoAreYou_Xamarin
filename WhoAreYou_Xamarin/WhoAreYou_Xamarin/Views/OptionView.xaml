@@ -11,14 +11,16 @@
 
             <StackLayout Orientation="Horizontal"
                          Margin="20">
-                <Switch VerticalOptions="CenterAndExpand"/>
+                <Switch VerticalOptions="CenterAndExpand"
+                        IsToggled="{Binding OpenAlert}"/>
                 <Label Text="열릴 때 알람"
                        VerticalOptions="CenterAndExpand"/>
             </StackLayout>
 
             <StackLayout Orientation="Horizontal"
                          Margin="20">
-                <Switch VerticalOptions="CenterAndExpand"/>
+                <Switch VerticalOptions="CenterAndExpand"
+                        IsToggled="{Binding CloseAlert}"/>
                 <Label Text="닫힐 때 알람"
                        VerticalOptions="CenterAndExpand"/>
             </StackLayout>

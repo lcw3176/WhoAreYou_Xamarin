@@ -2,10 +2,30 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WhoAreYou_Xamarin.Views.AddDeviceView">
-    <ContentPage.Content WidthRequest="50"
-                         HeightRequest="50">
-      <StackLayout>
-          <Label Text="Hello Xamarin.Forms!" />
-      </StackLayout>
-  </ContentPage.Content>
+    <ListView ItemsSource="{Binding bluetoothCollection}">
+        <ListView.RowHeight>
+            <OnPlatform x:TypeArguments="x:Int32">
+                <On Platform="Android">80</On>
+            </OnPlatform>
+        </ListView.RowHeight>
+
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <StackLayout Orientation="Vertical"
+                                     VerticalOptions="Center"
+                                     Margin="10">
+                        <Label Text="{Binding name}"
+                               FontSize="Small"
+                               FontAttributes="Bold"
+                               VerticalOptions="CenterAndExpand"/>
+                        
+                        <Label Text="{Binding type}"
+                               FontSize="Micro"
+                               VerticalOptions="CenterAndExpand"/>
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
 </ContentPage>

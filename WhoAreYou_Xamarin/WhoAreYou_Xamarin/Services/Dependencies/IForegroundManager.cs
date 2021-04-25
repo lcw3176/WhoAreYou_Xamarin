@@ -1,7 +1,13 @@
-﻿namespace WhoAreYou_Xamarin.Services.Dependencies
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace WhoAreYou_Xamarin.Services.Dependencies
 {
     public interface IForegroundManager
     {
-        void Update(string deviceName, bool isOpen);
+        bool IsRunning();
+        void StartService();
+        void StopRun();
     }
 }

@@ -11,7 +11,7 @@ using Xamarin.Forms;
 
 namespace WhoAreYou_Xamarin.Services
 {
-    static class SocketService
+    public static class SocketService
     {
         private static ClientWebSocket socket = new ClientWebSocket();
         private static JsonService jsonService = new JsonService();
@@ -53,6 +53,8 @@ namespace WhoAreYou_Xamarin.Services
         {
             try
             {
+                PropertyService property = new PropertyService();
+
                 while (socket.State == WebSocketState.Open)
                 {
                     ArraySegment<byte> bytes = new ArraySegment<byte>(new byte[1024]);
@@ -64,17 +66,23 @@ namespace WhoAreYou_Xamarin.Services
                     {
                         string resultSet = jsonService.ReadJson(values, Response.result);
                         string deviceName = jsonService.ReadJson(resultSet, Property.Device.name);
-                        bool state = bool.Parse(jsonService.ReadJson(resultSet, Property.Log.state));
+                        bool isOpen = bool.Parse(jsonService.ReadJson(resultSet, Property.Log.state));
+                        bool userOpenAlert = bool.Parse(property.Read(Property.User.openAlert).ToString());
+                        bool userCloseAlert = bool.Parse(property.Read(Property.User.closeAlert).ToString());
+
+                        if ((isOpen && userOpenAlert) || (!isOpen && userCloseAlert))
+                        {
+                            DependencyService.Get<IPushAlarmManager>().Update(deviceName, isOpen);
+                        }
 
                         
-                        DependencyService.Get<IForegroundManager>().Update(deviceName, state);
                     }
                 }
             }
 
             catch
             {
-                DependencyService.Get<IToastMessage>().Alert("알람 에러");
+                DependencyService.Get<IForegroundManager>().StopRun();
             }
 
         }

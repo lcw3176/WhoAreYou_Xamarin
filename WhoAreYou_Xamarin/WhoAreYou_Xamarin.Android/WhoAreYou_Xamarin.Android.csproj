@@ -65,8 +65,11 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\Dependencies\ForegroudManager.cs" />
+    <Compile Include="Services\Dependencies\BluetoothManager.cs" />
+    <Compile Include="Services\Dependencies\ForegroundManager.cs" />
+    <Compile Include="Services\Dependencies\PushAlarmManager.cs" />
     <Compile Include="Services\Dependencies\ToastMessage.cs" />
+    <Compile Include="Services\ForegroundService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

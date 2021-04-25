@@ -1,4 +1,5 @@
 ﻿
+using WhoAreYou_Xamarin.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -10,6 +11,7 @@ namespace WhoAreYou_Xamarin.Views
         public AddDeviceView()
         {
             InitializeComponent();
+            BindingContext = new AddDeviceViewModel();
         }
     }
 }

@@ -6,6 +6,7 @@ using WhoAreYou_Xamarin.Models.Property;
 using WhoAreYou_Xamarin.Models.Response;
 using WhoAreYou_Xamarin.Models.Url;
 using WhoAreYou_Xamarin.Services;
+using WhoAreYou_Xamarin.Services.Dependencies;
 using WhoAreYou_Xamarin.Views;
 using Xamarin.Forms;
 
@@ -33,10 +34,9 @@ namespace WhoAreYou_Xamarin.ViewModels
             await Shell.Current.GoToAsync("//viewLog");
         }
 
-        private void AddDeviceExecuteMethod(object obj)
+        private async void AddDeviceExecuteMethod(object obj)
         {
-            SocketService.Test();
-            //await App.Current.MainPage.Navigation.PushModalAsync(new AddDeviceView());
+            await App.Current.MainPage.Navigation.PushModalAsync(new AddDeviceView());
         }
 
 
@@ -61,6 +61,11 @@ namespace WhoAreYou_Xamarin.ViewModels
                         name = nameList[i],
                         searchLogCommand = searchLogCommand
                     });
+                }
+
+                if (!DependencyService.Get<IForegroundManager>().IsRunning())
+                {
+                    DependencyService.Get<IForegroundManager>().StartService();
                 }
             }
 

@@ -3,23 +3,22 @@ using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.OS;
-using WhoAreYou_Xamarin.Droid.Services.Dependencies;
 using WhoAreYou_Xamarin.Services.Dependencies;
 
-[assembly: Xamarin.Forms.Dependency(typeof(ForegroudManager))]
+[assembly: Xamarin.Forms.Dependency(typeof(WhoAreYou_Xamarin.Droid.Services.Dependencies.PushAlarmManager))]
 namespace WhoAreYou_Xamarin.Droid.Services.Dependencies
 {
-    class ForegroudManager : IForegroundManager
+    class PushAlarmManager : IPushAlarmManager
     {
         private int NOTIFICATION_ID = 9000;
         private const string channelId = "whoareyou";
         private const string channelName = "whoAreYou";
         private const string channelDescription = "the default channel for whoareyou";
-        public static ForegroudManager Instance { get; private set; }
+        public static PushAlarmManager Instance { get; private set; }
 
-        private NotificationManager manager;
+        private Android.App.NotificationManager manager;
 
-        public ForegroudManager()
+        public PushAlarmManager()
         {
             if (Instance == null)
             {
@@ -31,7 +30,7 @@ namespace WhoAreYou_Xamarin.Droid.Services.Dependencies
 
         private void CreateChannel()
         {
-            manager = (NotificationManager)Application.Context.GetSystemService(Context.NotificationService);
+            manager = (Android.App.NotificationManager)Application.Context.GetSystemService(Context.NotificationService);
 
             if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
             {
@@ -77,7 +76,6 @@ namespace WhoAreYou_Xamarin.Droid.Services.Dependencies
             
 
             manager.Notify(NOTIFICATION_ID++, notification);
-
         }
 
     }

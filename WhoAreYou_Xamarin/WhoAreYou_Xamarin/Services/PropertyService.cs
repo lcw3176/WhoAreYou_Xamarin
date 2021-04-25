@@ -2,7 +2,7 @@
 
 namespace WhoAreYou_Xamarin.Services
 {
-    class PropertyService
+    public class PropertyService
     {
         public object Read(string key)
         {
