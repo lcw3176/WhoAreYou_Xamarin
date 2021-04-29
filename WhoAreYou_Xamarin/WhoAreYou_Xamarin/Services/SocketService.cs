@@ -72,7 +72,7 @@ namespace WhoAreYou_Xamarin.Services
 
                         if ((isOpen && userOpenAlert) || (!isOpen && userCloseAlert))
                         {
-                            DependencyService.Get<IPushAlarmManager>().Update(deviceName, isOpen);
+                            DependencyService.Get<DIPushAlarm>().Update(deviceName, isOpen);
                         }
 
                         
@@ -82,7 +82,7 @@ namespace WhoAreYou_Xamarin.Services
 
             catch
             {
-                DependencyService.Get<IForegroundManager>().StopRun();
+                DependencyService.Get<DIForeground>().StopRun();
             }
 
         }
@@ -91,8 +91,8 @@ namespace WhoAreYou_Xamarin.Services
 
         public async static void Test()
         {
-            string token = new PropertyService().Read(Property.User.token).ToString();
-            ArraySegment<byte> bytes = new ArraySegment<byte>(Encoding.UTF8.GetBytes(token + ",무야호," + testValue.ToString()));
+            string email = new PropertyService().Read(Property.User.email).ToString();
+            ArraySegment<byte> bytes = new ArraySegment<byte>(Encoding.UTF8.GetBytes(email + ",무야호," + testValue.ToString()));
             await socket.SendAsync(bytes, WebSocketMessageType.Text, true, CancellationToken.None);
 
             testValue = !testValue;

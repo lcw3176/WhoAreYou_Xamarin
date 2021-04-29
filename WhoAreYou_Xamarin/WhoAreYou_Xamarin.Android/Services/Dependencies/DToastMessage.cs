@@ -3,10 +3,10 @@ using WhoAreYou_Xamarin.Droid.Services.Dependencies;
 using WhoAreYou_Xamarin.Services.Dependencies;
 using Xamarin.Forms;
 
-[assembly: Dependency(typeof(ToastMessage))]
+[assembly: Dependency(typeof(DToastMessage))]
 namespace WhoAreYou_Xamarin.Droid.Services.Dependencies
 {
-    class ToastMessage : IToastMessage
+    class DToastMessage : DIToastMessage
     {
         public void Alert(string message)
         {

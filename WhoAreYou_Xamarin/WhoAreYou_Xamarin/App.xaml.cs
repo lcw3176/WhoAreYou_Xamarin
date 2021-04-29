@@ -1,8 +1,4 @@
-﻿using System;
-using WhoAreYou_Xamarin.Models;
-using WhoAreYou_Xamarin.Services;
-using WhoAreYou_Xamarin.Services.Dependencies;
-using WhoAreYou_Xamarin.Views;
+﻿using WhoAreYou_Xamarin.Views;
 using Xamarin.Forms;
 
 namespace WhoAreYou_Xamarin
@@ -17,9 +13,10 @@ namespace WhoAreYou_Xamarin
 
         protected override void OnStart()
         {
-            
+
         }
 
+ 
         protected override void OnSleep()
         {
   

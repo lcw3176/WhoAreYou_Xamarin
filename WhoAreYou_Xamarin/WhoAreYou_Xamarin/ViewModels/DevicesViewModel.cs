@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using WhoAreYou_Xamarin.Models;
 using WhoAreYou_Xamarin.Models.Property;
@@ -21,6 +20,7 @@ namespace WhoAreYou_Xamarin.ViewModels
 
         public ICommand addDeviceCommand { get; set; }
         public ICommand searchLogCommand { get; set; }
+
         public DevicesViewModel()
         {
             Init();
@@ -63,9 +63,9 @@ namespace WhoAreYou_Xamarin.ViewModels
                     });
                 }
 
-                if (!DependencyService.Get<IForegroundManager>().IsRunning())
+                if (!DependencyService.Get<DIForeground>().IsRunning())
                 {
-                    DependencyService.Get<IForegroundManager>().StartService();
+                    DependencyService.Get<DIForeground>().StartService();
                 }
             }
 

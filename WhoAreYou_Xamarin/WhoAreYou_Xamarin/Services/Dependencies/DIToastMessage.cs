@@ -3,7 +3,7 @@
     /// <summary>
     /// 안드로이드 토스트 메세지
     /// </summary>
-    public interface IToastMessage
+    public interface DIToastMessage
     {
         void Alert(string message);
     }

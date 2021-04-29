@@ -2,30 +2,82 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WhoAreYou_Xamarin.Views.AddDeviceView">
-    <ListView ItemsSource="{Binding bluetoothCollection}">
-        <ListView.RowHeight>
-            <OnPlatform x:TypeArguments="x:Int32">
-                <On Platform="Android">80</On>
-            </OnPlatform>
-        </ListView.RowHeight>
 
-        <ListView.ItemTemplate>
-            <DataTemplate>
-                <ViewCell>
-                    <StackLayout Orientation="Vertical"
-                                     VerticalOptions="Center"
-                                     Margin="10">
-                        <Label Text="{Binding name}"
-                               FontSize="Small"
-                               FontAttributes="Bold"
-                               VerticalOptions="CenterAndExpand"/>
-                        
-                        <Label Text="{Binding type}"
-                               FontSize="Micro"
-                               VerticalOptions="CenterAndExpand"/>
-                    </StackLayout>
-                </ViewCell>
-            </DataTemplate>
-        </ListView.ItemTemplate>
-    </ListView>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.*"/>
+            <RowDefinition Height="9.*"/>
+        </Grid.RowDefinitions>
+        <ActivityIndicator IsRunning="{Binding isRun}"
+                           IsVisible="true"
+                           VerticalOptions="CenterAndExpand"
+                           HorizontalOptions="CenterAndExpand"
+                           Color="Black"
+                           Grid.RowSpan="2"/>
+
+        <Label Text="페어링 된 기기"
+               FontSize="Medium"
+               VerticalOptions="Center"
+               HorizontalOptions="CenterAndExpand"
+               Grid.Row="0"
+               TextColor="Black"/>
+        
+        <ListView ItemsSource="{Binding wirelessCollection}"
+                  Grid.Row="1">
+            <ListView.RowHeight>
+                <OnPlatform x:TypeArguments="x:Int32">
+                    <On Platform="Android">120</On>
+                </OnPlatform>
+            </ListView.RowHeight>
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal"
+                                 VerticalOptions="Center"
+                                 Margin="10">
+
+                            <StackLayout Orientation="Vertical">
+                                <Label Text="{Binding name}"
+                                       FontSize="Small"
+                                       FontAttributes="Bold"
+                                       HorizontalOptions="Start"
+                                       VerticalOptions="Center"
+                                       TextColor="Black"/>
+
+                                <Label Text="{Binding type}"
+                                       FontSize="Micro"
+                                       VerticalOptions="CenterAndExpand"
+                                       TextColor="Black"/>
+                            </StackLayout>
+
+                            <Button Text="연결하기"
+                                    Command="{Binding itemClickCommand}"
+                                    CommandParameter="{Binding name}"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="End"
+                                    BackgroundColor="AliceBlue"
+                                    BorderWidth="0"
+                                    TextColor="Black"/>
+
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+
+            <ListView.Resources>
+                <Style TargetType="ListView">
+                    <Style.Triggers>
+                        <DataTrigger TargetType="ListView"
+                                 Binding="{Binding isRun}"
+                                 Value="true">
+                            <Setter Property="Opacity"
+                                Value="0.3"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.Resources>
+        </ListView>
+    </Grid>
+   
 </ContentPage>

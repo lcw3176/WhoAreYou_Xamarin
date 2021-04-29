@@ -30,9 +30,11 @@ namespace WhoAreYou_Xamarin.Droid
                 Manifest.Permission.AccessFineLocation,
                 Manifest.Permission.AccessCoarseLocation,
                 Manifest.Permission.BluetoothAdmin,
+                Manifest.Permission.AccessWifiState,
+                Manifest.Permission.ChangeWifiState
             };
 
-            this.RequestPermissions(permissions, 0);
+            this.RequestPermissions(permissions, 1);
 
 
         }

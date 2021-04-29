@@ -14,7 +14,8 @@
                 Grid.Row="0"
                 FontSize="Large"
                 HorizontalOptions="CenterAndExpand"
-                VerticalOptions="CenterAndExpand"/>
+                VerticalOptions="CenterAndExpand"
+               TextColor="Black"/>
 
 
         <StackLayout Margin="20"
@@ -23,13 +24,15 @@
             <Entry Placeholder="ID"
                    HorizontalOptions="FillAndExpand"
                    Margin="5"
-                   Text="{Binding Id}"/>
+                   Text="{Binding Id}"
+                   TextColor="Black"/>
 
             <Entry Placeholder="Password"
                    HorizontalOptions="FillAndExpand"
                    Margin="5"
                    IsPassword="True"
-                   x:Name="password"/>
+                   x:Name="password"
+                   TextColor="Black"/>
 
             <Button Text="가입하기" 
                     BackgroundColor="DarkCyan" 

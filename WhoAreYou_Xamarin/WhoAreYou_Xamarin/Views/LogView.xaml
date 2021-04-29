@@ -54,7 +54,8 @@
                                 <!--<Label Text="기록 시간: "
                                        FontSize="Micro"/>-->
                                 <Label Text="{Binding time}"
-                                       FontSize="Micro"/>
+                                       FontSize="Micro"
+                                       TextColor="Black"/>
                             </StackLayout>
 
                         </StackLayout>

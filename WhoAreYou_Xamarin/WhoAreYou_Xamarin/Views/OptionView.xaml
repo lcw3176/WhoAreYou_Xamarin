@@ -14,7 +14,8 @@
                 <Switch VerticalOptions="CenterAndExpand"
                         IsToggled="{Binding OpenAlert}"/>
                 <Label Text="열릴 때 알람"
-                       VerticalOptions="CenterAndExpand"/>
+                       VerticalOptions="CenterAndExpand"
+                       TextColor="Black"/>
             </StackLayout>
 
             <StackLayout Orientation="Horizontal"
@@ -22,7 +23,8 @@
                 <Switch VerticalOptions="CenterAndExpand"
                         IsToggled="{Binding CloseAlert}"/>
                 <Label Text="닫힐 때 알람"
-                       VerticalOptions="CenterAndExpand"/>
+                       VerticalOptions="CenterAndExpand"
+                       TextColor="Black"/>
             </StackLayout>
 
             <!--<StackLayout Orientation="Horizontal"
@@ -36,6 +38,7 @@
                          Margin="20">
                 <Button Text="로그아웃"
                         VerticalOptions="CenterAndExpand"
+                        TextColor="Black"
                         Command="{Binding SignOutCommand}"/>
             </StackLayout>
         </StackLayout>

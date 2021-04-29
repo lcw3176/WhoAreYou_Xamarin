@@ -5,20 +5,20 @@ using Android.Graphics;
 using Android.OS;
 using WhoAreYou_Xamarin.Services.Dependencies;
 
-[assembly: Xamarin.Forms.Dependency(typeof(WhoAreYou_Xamarin.Droid.Services.Dependencies.PushAlarmManager))]
+[assembly: Xamarin.Forms.Dependency(typeof(WhoAreYou_Xamarin.Droid.Services.Dependencies.DPushAlarm))]
 namespace WhoAreYou_Xamarin.Droid.Services.Dependencies
 {
-    class PushAlarmManager : IPushAlarmManager
+    class DPushAlarm : DIPushAlarm
     {
         private int NOTIFICATION_ID = 9000;
         private const string channelId = "whoareyou";
         private const string channelName = "whoAreYou";
         private const string channelDescription = "the default channel for whoareyou";
-        public static PushAlarmManager Instance { get; private set; }
+        public static DPushAlarm Instance { get; private set; }
 
         private Android.App.NotificationManager manager;
 
-        public PushAlarmManager()
+        public DPushAlarm()
         {
             if (Instance == null)
             {

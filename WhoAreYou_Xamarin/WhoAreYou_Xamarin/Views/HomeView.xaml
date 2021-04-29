@@ -5,20 +5,22 @@
             xmlns:views="clr-namespace:WhoAreYou_Xamarin.Views"
        Shell.NavBarIsVisible="False">
 
-    <TabBar>
-        <ShellContent Title="기기 목록"
-                  Icon="list_icon.png">
+    <TabBar Shell.BackgroundColor="LightSteelBlue"
+            Shell.TitleColor="White"
+            Shell.UnselectedColor="DarkSlateGray">
+        <ShellContent Title="기기 목록" 
+                      Icon="list_icon.png">
             <views:DevicesView/>
         </ShellContent>
 
         <ShellContent Title="기록 보기"
-                  Icon="document_icon.png"
-                  Route="viewLog">
+                      Icon="document_icon.png"
+                      Route="viewLog">
             <views:LogView/>
         </ShellContent>
 
         <ShellContent Title="옵션 설정"
-                  Icon="setting_icon.png">
+                      Icon="setting_icon.png">
             <views:OptionView/>
         </ShellContent>
     </TabBar>

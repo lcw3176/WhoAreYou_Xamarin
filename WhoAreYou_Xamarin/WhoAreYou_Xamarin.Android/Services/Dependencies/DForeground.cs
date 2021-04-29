@@ -1,10 +1,10 @@
 ﻿using Android.Content;
 using WhoAreYou_Xamarin.Services.Dependencies;
 
-[assembly: Xamarin.Forms.Dependency(typeof(WhoAreYou_Xamarin.Droid.Services.Dependencies.ForegroundManager))]
+[assembly: Xamarin.Forms.Dependency(typeof(WhoAreYou_Xamarin.Droid.Services.Dependencies.DForeground))]
 namespace WhoAreYou_Xamarin.Droid.Services.Dependencies
 {
-    class ForegroundManager : IForegroundManager
+    class DForeground : DIForeground
     {
         private static bool isRun = false;
 

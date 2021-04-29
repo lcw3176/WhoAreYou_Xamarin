@@ -68,7 +68,7 @@ namespace WhoAreYou_Xamarin.ViewModels
         {
             propertyService.Delete(Property.User.email);
             propertyService.Delete(Property.User.token);
-            DependencyService.Get<IForegroundManager>().StopRun();
+            DependencyService.Get<DIForeground>().StopRun();
             App.Current.MainPage = new LoginView();
         }
     }

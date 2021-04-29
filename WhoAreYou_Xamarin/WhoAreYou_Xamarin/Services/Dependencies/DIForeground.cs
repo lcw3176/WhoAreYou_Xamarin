@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WhoAreYou_Xamarin.Services.Dependencies
 {
-    public interface IForegroundManager
+    public interface DIForeground
     {
         bool IsRunning();
         void StartService();

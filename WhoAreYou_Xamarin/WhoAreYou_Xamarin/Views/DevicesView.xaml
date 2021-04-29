@@ -26,11 +26,13 @@
                                     BorderColor="Black"
                                     CornerRadius="30"
                                     Margin="10"
+                                    TextColor="Black"
                                     Command="{Binding searchLogCommand}"
                                     CommandParameter="{Binding name}"/>
 
                             <Label Text="{Binding name}"
                                    FontSize="Medium"
+                                   TextColor="Black"
                                    VerticalOptions="CenterAndExpand"/>
                             
                             <!--<StackLayout Orientation="Vertical"

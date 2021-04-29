@@ -29,12 +29,14 @@
             <Entry Placeholder="ID"
                    HorizontalOptions="FillAndExpand"
                    Margin="5"
-                   Text="{Binding Id}"/>
+                   Text="{Binding Id}"
+                   TextColor="Black"/>
 
             <Entry Placeholder="Password"
                    HorizontalOptions="FillAndExpand"
                    Margin="5"
                    IsPassword="True"
+                   TextColor="Black"
                    x:Name="password"/>
             
 

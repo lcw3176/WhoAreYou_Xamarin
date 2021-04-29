@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Input;
 using WhoAreYou_Xamarin.Models;
 using WhoAreYou_Xamarin.Models.Property;
@@ -58,7 +57,7 @@ namespace WhoAreYou_Xamarin.ViewModels
 
             if(string.IsNullOrEmpty(id) || string.IsNullOrEmpty(pw))
             {
-                DependencyService.Get<IToastMessage>().Alert(ErrorMessage.empty);
+                DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.empty);
                 
                 return;
             }
@@ -75,7 +74,7 @@ namespace WhoAreYou_Xamarin.ViewModels
 
             if (string.IsNullOrEmpty(result))
             {
-                DependencyService.Get<IToastMessage>().Alert(ErrorMessage.network);
+                DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.network);
 
                 return;
             }
@@ -83,13 +82,13 @@ namespace WhoAreYou_Xamarin.ViewModels
 
             if(int.Parse(jsonService.ReadJson(result, Response.code)) == Response.Code.success)
             {
-                DependencyService.Get<IToastMessage>().Alert(SuccessMessage.signUp);
+                DependencyService.Get<DIToastMessage>().Alert(SuccessMessage.signUp);
                 App.Current.MainPage = new LoginView();
             }
 
             else
             {
-                DependencyService.Get<IToastMessage>().Alert(ErrorMessage.existUser);
+                DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.existUser);
             }
 
         }

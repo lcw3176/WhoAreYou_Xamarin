@@ -7,8 +7,6 @@ using Xamarin.Forms;
 using WhoAreYou_Xamarin.Models.Url;
 using WhoAreYou_Xamarin.Models.Property;
 using WhoAreYou_Xamarin.Models.Response;
-using System;
-using System.Threading.Tasks;
 
 namespace WhoAreYou_Xamarin.ViewModels
 {
@@ -75,7 +73,7 @@ namespace WhoAreYou_Xamarin.ViewModels
 
             if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(pw))
             {
-                DependencyService.Get<IToastMessage>().Alert(ErrorMessage.empty);
+                DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.empty);
                 
                 return;
             }
@@ -86,7 +84,7 @@ namespace WhoAreYou_Xamarin.ViewModels
 
             if(string.IsNullOrEmpty(jsonString))
             {
-                DependencyService.Get<IToastMessage>().Alert(ErrorMessage.network);
+                DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.network);
                 
                 return;
             }
@@ -102,7 +100,7 @@ namespace WhoAreYou_Xamarin.ViewModels
 
             else
             {
-                DependencyService.Get<IToastMessage>().Alert(ErrorMessage.notMember);
+                DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.notMember);
             }
 
             
