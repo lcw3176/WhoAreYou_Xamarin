@@ -11,6 +11,7 @@
         {
             public static string Disabled = "블루투스를 켜고 다시 진행해주세요";
             public static string ConnectionFailed = "장치와 연결에 실패했습니다";
+            public static string alreadyExist = "이미 존재하는 기기명입니다";
         }
 
         public static class Wifi
