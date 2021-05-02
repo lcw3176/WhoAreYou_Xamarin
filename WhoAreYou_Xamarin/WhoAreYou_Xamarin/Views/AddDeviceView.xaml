@@ -6,14 +6,15 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1.*"/>
-            <RowDefinition Height="9.*"/>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="8.*"/>
         </Grid.RowDefinitions>
         <ActivityIndicator IsRunning="{Binding isRun}"
                            IsVisible="true"
                            VerticalOptions="CenterAndExpand"
                            HorizontalOptions="CenterAndExpand"
                            Color="Black"
-                           Grid.RowSpan="2"/>
+                           Grid.RowSpan="3"/>
 
         <Label Text="페어링 된 기기"
                FontSize="Medium"
@@ -21,9 +22,20 @@
                HorizontalOptions="CenterAndExpand"
                Grid.Row="0"
                TextColor="Black"/>
-        
+
+        <StackLayout Orientation="Horizontal"
+                     VerticalOptions="CenterAndExpand"
+                     HorizontalOptions="FillAndExpand"
+                     Grid.Row="1">
+            <Entry Placeholder="기기 별칭 입력  ex) 현관문, 창문 감시"
+                   Margin="20, 0, 20, 0"
+                   Text="{Binding deviceNickName}"
+                   VerticalOptions="CenterAndExpand"
+                   HorizontalOptions="FillAndExpand"/>
+            
+        </StackLayout>
         <ListView ItemsSource="{Binding wirelessCollection}"
-                  Grid.Row="1">
+                  Grid.Row="2">
             <ListView.RowHeight>
                 <OnPlatform x:TypeArguments="x:Int32">
                     <On Platform="Android">120</On>
