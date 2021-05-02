@@ -77,7 +77,6 @@ namespace WhoAreYou_Xamarin.Services
         }
 
 
-
         public async Task<string> SendPost(string url, Dictionary<string, string> values)
         {
             try
@@ -87,6 +86,67 @@ namespace WhoAreYou_Xamarin.Services
                     var encodedContent = new FormUrlEncodedContent(values);
 
                     using (HttpResponseMessage response = await http.PostAsync(url, encodedContent))
+                    {
+                        using (HttpContent content = response.Content)
+                        {
+                            return await content.ReadAsStringAsync();
+                        }
+                    }
+                }
+            }
+
+            catch
+            {
+                return null;
+            }
+
+        }
+
+        public async Task<string> SendPostWithToken(string url, string token, Dictionary<string, string> values)
+        {
+            try
+            {
+                using (HttpClient http = new HttpClient())
+                {
+                    http.DefaultRequestHeaders.Add("X-AUTH-TOKEN", token);
+                    var encodedContent = new FormUrlEncodedContent(values);
+
+                    using (HttpResponseMessage response = await http.PostAsync(url, encodedContent))
+                    {
+                        using (HttpContent content = response.Content)
+                        {
+                            return await content.ReadAsStringAsync();
+                        }
+                    }
+                }
+            }
+
+            catch
+            {
+                return null;
+            }
+
+        }
+
+        public async Task<string> SendDeleteWithToken(string address, string token, params string[] values)
+        {
+            try
+            {
+                StringBuilder url = new StringBuilder();
+                url.Append(address.ToString());
+
+                foreach (var i in values)
+                {
+                    url.Append("/");
+                    url.Append(i);
+                }
+
+                using (HttpClient http = new HttpClient())
+                {
+                    http.DefaultRequestHeaders.Add("X-AUTH-TOKEN", token);
+
+
+                    using (HttpResponseMessage response = await http.DeleteAsync(url.ToString()))
                     {
                         using (HttpContent content = response.Content)
                         {
