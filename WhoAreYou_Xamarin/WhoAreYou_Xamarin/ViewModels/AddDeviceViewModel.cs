@@ -13,6 +13,7 @@ namespace WhoAreYou_Xamarin.ViewModels
     {
         private bool run = false;  // Activity Indicator 컨트롤
 
+        public string deviceNickName { get; set; } = string.Empty;
         public ObservableCollection<Wireless> wirelessCollection { get; set; } = new ObservableCollection<Wireless>();
         public ICommand itemClickCommand { get; set; }        
         public bool isRun 
@@ -64,6 +65,26 @@ namespace WhoAreYou_Xamarin.ViewModels
         {
             isRun = true;
 
+            if(string.IsNullOrEmpty(deviceNickName))
+            {
+                DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.empty);
+                isRun = false;
+
+                return;
+            }
+
+            foreach(var i in DevicesViewModel.GetInstance().deviceCollection)
+            {
+                if(i.name == deviceNickName)
+                {
+                    DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.Bluetooth.alreadyExist);
+                    isRun = false;
+
+                    return;
+                }
+                
+            }
+
             if (DependencyService.Get<DIBluetooth>().isConnect())
             {
                 DependencyService.Get<DIBluetooth>().DisconnectDevice();
@@ -88,8 +109,10 @@ namespace WhoAreYou_Xamarin.ViewModels
                 return;
             }
 
-            await App.Current.MainPage.Navigation.PopToRootAsync();
+            EnqueueDevice(deviceNickName);
             isRun = false;
+            await App.Current.MainPage.Navigation.PopToRootAsync();
+            
         }
 
      
