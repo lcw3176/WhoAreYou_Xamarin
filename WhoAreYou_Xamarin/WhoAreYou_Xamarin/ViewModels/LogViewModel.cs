@@ -62,8 +62,8 @@ namespace WhoAreYou_Xamarin.ViewModels
                         Init();
                     }
 
-                    controller.Reset();
-                    controller.WaitOne(Timeout.Infinite);
+                    logController.Reset();
+                    logController.WaitOne(Timeout.Infinite);
                 }
             }
 
@@ -94,9 +94,6 @@ namespace WhoAreYou_Xamarin.ViewModels
                                  .ToLocalTime()
                     });
                 }
-
-
-
             }
         }
     }

@@ -1,7 +1,6 @@
 ﻿using Android.Bluetooth;
 using Android.Locations;
 using Java.Util;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WhoAreYou_Xamarin.Services.Dependencies;
@@ -31,7 +30,7 @@ namespace WhoAreYou_Xamarin.Droid.Services.Dependencies
             {
                 if(i.Name == deviceName)
                 {
-                    device = i;
+                    device = adapter.GetRemoteDevice(i.Address);
                     break;
                 }
             }
@@ -83,7 +82,7 @@ namespace WhoAreYou_Xamarin.Droid.Services.Dependencies
 
         public async Task<bool> SetDevice(string ssid, string pw)
         {
-            Java.Lang.String msg = new Java.Lang.String(ssid + "," + pw);
+            Java.Lang.String msg = new Java.Lang.String(ssid);
 
             byte[] buffer = msg.GetBytes();
 

@@ -4,14 +4,20 @@
              x:Class="WhoAreYou_Xamarin.Views.DevicesView"
              NavigationPage.HasNavigationBar="False">
 
-    <StackLayout Orientation="Vertical">
-        <ListView ItemsSource="{Binding deviceCollection}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="9.*"/>
+            <RowDefinition Height="1.*"/>
+        </Grid.RowDefinitions>
+
+        <ListView ItemsSource="{Binding deviceCollection}"
+                  Grid.Row="0">
             <ListView.RowHeight>
                 <OnPlatform x:TypeArguments="x:Int32">
                     <On Platform="Android">80</On>
                 </OnPlatform>
             </ListView.RowHeight>
-            
+
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
@@ -34,12 +40,12 @@
                                    FontSize="Medium"
                                    TextColor="Black"
                                    VerticalOptions="CenterAndExpand"/>
-                            
+
                             <!--<StackLayout Orientation="Vertical"
                                          Margin="2">
                                 <Label Text="{Binding name}"
                                    FontSize="Small"/>-->
-                                <!--<StackLayout Orientation="Horizontal">
+                            <!--<StackLayout Orientation="Horizontal">
                                     <Label Text="마지막 기록: "
                                        FontSize="Micro"/>
                                     <Label Text="{Binding lastLog}"
@@ -54,16 +60,22 @@
                                       Command="{Binding searchLogCommand}"
                                       CommandParameter="{Binding name}"/>
                         </ViewCell.ContextActions>-->
+
+                        <ViewCell.ContextActions>
+                            <MenuItem Text="등록 해제"
+                                      Command="{Binding deleteCommand}"
+                                      CommandParameter="{Binding name}"/>
+                        </ViewCell.ContextActions>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
 
-
         <StackLayout Orientation="Horizontal"
                      VerticalOptions="EndAndExpand"
                      HorizontalOptions="Center"
-                     Margin="0, 0, 0, 30">
+                     Margin="0, 0, 0, 30"
+                     Grid.Row="1">
             <Button Text="기기 추가"
                     BorderWidth="1"
                     BorderColor="LightGray"
@@ -71,8 +83,5 @@
                     Command="{Binding addDeviceCommand}"
                     CornerRadius="20"/>
         </StackLayout>
-
-    </StackLayout>
-    
-    
+    </Grid>
 </ContentPage>
