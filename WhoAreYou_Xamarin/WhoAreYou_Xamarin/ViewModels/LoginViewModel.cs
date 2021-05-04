@@ -6,16 +6,14 @@ using WhoAreYou_Xamarin.Views;
 using Xamarin.Forms;
 using WhoAreYou_Xamarin.Models.Url;
 using WhoAreYou_Xamarin.Models.Property;
-using WhoAreYou_Xamarin.Models.Response;
 
 namespace WhoAreYou_Xamarin.ViewModels
 {
     class LoginViewModel : BaseViewModel
     {
         private string id = string.Empty;
-        private WebService webService = new WebService();
-        private JsonService jsonService = new JsonService();
-        private PropertyService propertyService = new PropertyService();
+        private readonly WebService webService = new WebService();
+        private readonly PropertyService propertyService = new PropertyService();
 
         public ICommand LoginCommand { get; set; }
         public ICommand GoToSignUpCommand { get; set; }
@@ -46,7 +44,7 @@ namespace WhoAreYou_Xamarin.ViewModels
             {
                 string result = await webService.SendGet(Urls.AUTHCHECK, token.ToString());
 
-                if (jsonService.ReadJson(result, Response.code) == Response.Code.success.ToString())
+                if(!string.IsNullOrEmpty(result))
                 {
                     App.Current.MainPage = new HomeView();
                 }
@@ -77,33 +75,23 @@ namespace WhoAreYou_Xamarin.ViewModels
                 
                 return;
             }
+
             EncryptoService encryptoService = new EncryptoService();
 
             pw = encryptoService.Generate(pw); 
-            string jsonString = await webService.SendGet(Urls.SIGNIN, id, pw);
+            string responseToken = await webService.SendGet(Urls.SIGNIN, id, pw);
 
-            if(string.IsNullOrEmpty(jsonString))
+            if(string.IsNullOrEmpty(responseToken))
             {
-                DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.network);
+                DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.notMember);
                 
                 return;
             }
 
-            if (int.Parse(jsonService.ReadJson(jsonString, Response.code)) == Response.Code.success)
-            {
-                string token = jsonService.ReadJson(jsonString, Response.result);
-                propertyService.Write(Property.User.token, token);
-                propertyService.Write(Property.User.email, id);
+            propertyService.Write(Property.User.token, responseToken);
+            propertyService.Write(Property.User.email, id);
 
-                App.Current.MainPage = new HomeView();  
-            }
-
-            else
-            {
-                DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.notMember);
-            }
-
-            
+            App.Current.MainPage = new HomeView();
         }
     }
 }
