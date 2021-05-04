@@ -4,7 +4,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using WhoAreYou_Xamarin.Models.Property;
-using WhoAreYou_Xamarin.Models.Response;
 using WhoAreYou_Xamarin.Models.Url;
 using WhoAreYou_Xamarin.Services.Dependencies;
 using Xamarin.Forms;
@@ -15,6 +14,7 @@ namespace WhoAreYou_Xamarin.Services
     {
         private static ClientWebSocket socket = new ClientWebSocket();
         private static JsonService jsonService = new JsonService();
+        private const string tokenHeaderName = "X-AUTH-TOKEN";
 
         public static bool IsConnect()
         { 
@@ -34,7 +34,7 @@ namespace WhoAreYou_Xamarin.Services
                 if(socket.State != WebSocketState.Connecting)
                 {
                     Uri uri = new Uri(Urls.SOCKET);
-                    socket.Options.SetRequestHeader("X-AUTH-TOKEN", token);
+                    socket.Options.SetRequestHeader(tokenHeaderName, token);
                     await socket.ConnectAsync(uri, CancellationToken.None);
                 }
                 
@@ -62,21 +62,18 @@ namespace WhoAreYou_Xamarin.Services
                     WebSocketReceiveResult result = await socket.ReceiveAsync(bytes, CancellationToken.None);
                     string values = Encoding.UTF8.GetString(bytes.Array, 0, result.Count);
 
-                    if(jsonService.ReadJson(values, Response.code) == Response.Code.success.ToString())
+                    string deviceName = jsonService.ReadJson(values, Property.Device.name);
+                    bool isOpen = bool.Parse(jsonService.ReadJson(values, Property.Log.state));
+                    bool userOpenAlert = bool.Parse(property.Read(Property.User.openAlert).ToString());
+                    bool userCloseAlert = bool.Parse(property.Read(Property.User.closeAlert).ToString());
+
+                    if ((isOpen && userOpenAlert) || (!isOpen && userCloseAlert))
                     {
-                        string resultSet = jsonService.ReadJson(values, Response.result);
-                        string deviceName = jsonService.ReadJson(resultSet, Property.Device.name);
-                        bool isOpen = bool.Parse(jsonService.ReadJson(resultSet, Property.Log.state));
-                        bool userOpenAlert = bool.Parse(property.Read(Property.User.openAlert).ToString());
-                        bool userCloseAlert = bool.Parse(property.Read(Property.User.closeAlert).ToString());
-
-                        if ((isOpen && userOpenAlert) || (!isOpen && userCloseAlert))
-                        {
-                            DependencyService.Get<DIPushAlarm>().Update(deviceName, isOpen);
-                        }
-
-                        
+                        DependencyService.Get<DIPushAlarm>().Update(deviceName, isOpen);
                     }
+
+                    
+                    
                 }
             }
 
