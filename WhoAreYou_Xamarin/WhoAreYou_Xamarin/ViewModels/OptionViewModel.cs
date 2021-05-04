@@ -13,7 +13,7 @@ namespace WhoAreYou_Xamarin.ViewModels
         private bool closeAlert;
 
         public ICommand SignOutCommand { get; set; }
-        private PropertyService propertyService = new PropertyService();
+        private readonly PropertyService propertyService = new PropertyService();
         public bool OpenAlert 
         {
             get { return openAlert; }
