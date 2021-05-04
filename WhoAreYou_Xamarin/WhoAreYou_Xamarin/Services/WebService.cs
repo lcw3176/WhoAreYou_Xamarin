@@ -25,17 +25,22 @@ namespace WhoAreYou_Xamarin.Services
                 {
                     using (HttpResponseMessage response = await http.GetAsync(url.ToString()))
                     {
-                        using (HttpContent content = response.Content)
+                        if(response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
-                            return await content.ReadAsStringAsync();
+                            using (HttpContent content = response.Content)
+                            {
+                                return await content.ReadAsStringAsync();
+                            }
                         }
+
+                        return string.Empty;
                     }
                 }
             }
 
             catch
             {
-                return null;
+                return string.Empty;
             }
             
 
@@ -60,17 +65,23 @@ namespace WhoAreYou_Xamarin.Services
 
                     using (HttpResponseMessage response = await http.GetAsync(url.ToString()))
                     {
-                        using (HttpContent content = response.Content)
+                        if(response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
-                            return await content.ReadAsStringAsync();
+                            using (HttpContent content = response.Content)
+                            {
+                                return await content.ReadAsStringAsync();
+                            }
                         }
+
+                        return string.Empty;
+
                     }
                 }
             }
 
             catch
             {
-                return null;
+                return string.Empty;
             }
 
 
@@ -87,17 +98,23 @@ namespace WhoAreYou_Xamarin.Services
 
                     using (HttpResponseMessage response = await http.PostAsync(url, encodedContent))
                     {
-                        using (HttpContent content = response.Content)
+                        if(response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
-                            return await content.ReadAsStringAsync();
+                            using (HttpContent content = response.Content)
+                            {
+                                return await content.ReadAsStringAsync();
+                            }
                         }
+
+                        return string.Empty;
+
                     }
                 }
             }
 
             catch
             {
-                return null;
+                return string.Empty;
             }
 
         }
@@ -113,17 +130,23 @@ namespace WhoAreYou_Xamarin.Services
 
                     using (HttpResponseMessage response = await http.PostAsync(url, encodedContent))
                     {
-                        using (HttpContent content = response.Content)
+                        if(response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
-                            return await content.ReadAsStringAsync();
+                            using (HttpContent content = response.Content)
+                            {
+                                return await content.ReadAsStringAsync();
+                            }
                         }
+
+                        return string.Empty;
+
                     }
                 }
             }
 
             catch
             {
-                return null;
+                return string.Empty;
             }
 
         }
@@ -145,20 +168,25 @@ namespace WhoAreYou_Xamarin.Services
                 {
                     http.DefaultRequestHeaders.Add("X-AUTH-TOKEN", token);
 
-
                     using (HttpResponseMessage response = await http.DeleteAsync(url.ToString()))
                     {
-                        using (HttpContent content = response.Content)
+                        if(response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
-                            return await content.ReadAsStringAsync();
+                            using (HttpContent content = response.Content)
+                            {
+                                return await content.ReadAsStringAsync();
+                            }
                         }
+
+                        return string.Empty;
                     }
+
                 }
             }
 
             catch
             {
-                return null;
+                return string.Empty;
             }
 
         }
