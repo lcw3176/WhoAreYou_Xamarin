@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using WhoAreYou_Xamarin.Models;
 using WhoAreYou_Xamarin.Models.Property;
-using WhoAreYou_Xamarin.Models.Response;
 using WhoAreYou_Xamarin.Models.Url;
 using WhoAreYou_Xamarin.Services;
 
@@ -15,9 +14,9 @@ namespace WhoAreYou_Xamarin.ViewModels
         private string deviceName;
 
         public ObservableCollection<Log> logCollection { get; set; } =  new ObservableCollection<Log>();
-        private WebService webService = new WebService();
-        private PropertyService propertyService = new PropertyService();
-        private JsonService jsonService = new JsonService();
+        private readonly WebService webService = new WebService();
+        private readonly PropertyService propertyService = new PropertyService();
+        private readonly JsonService jsonService = new JsonService();
         private static LogViewModel instance;
 
         public string DeviceName
@@ -77,10 +76,8 @@ namespace WhoAreYou_Xamarin.ViewModels
             string userId = propertyService.Read(Property.User.email).ToString();
             string result = await webService.SendGetWithToken(Urls.LOG, token, userId, DeviceName);
 
-            if (jsonService.ReadJson(result, Response.code) == Response.Code.success.ToString())
+            if (!string.IsNullOrEmpty(result))
             {
-                result = jsonService.ReadJson(result, Response.result);
-                
                 var stateList = jsonService.ReadJArray(result, Property.Log.state);
                 var timeList = jsonService.ReadJArray(result, Property.Log.time);
                 DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Local);

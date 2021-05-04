@@ -2,7 +2,6 @@
 using System.Windows.Input;
 using WhoAreYou_Xamarin.Models;
 using WhoAreYou_Xamarin.Models.Property;
-using WhoAreYou_Xamarin.Models.Response;
 using WhoAreYou_Xamarin.Models.Url;
 using WhoAreYou_Xamarin.Services;
 using WhoAreYou_Xamarin.Services.Dependencies;
@@ -27,8 +26,7 @@ namespace WhoAreYou_Xamarin.ViewModels
             }
         }
 
-        private WebService webService = new WebService();
-        private JsonService jsonService = new JsonService();
+        private readonly WebService webService = new WebService();
 
         
         public SignUpViewModel()
@@ -61,6 +59,7 @@ namespace WhoAreYou_Xamarin.ViewModels
                 
                 return;
             }
+
             EncryptoService encryptoService = new EncryptoService();
             pw = encryptoService.Generate(pw);
 
@@ -74,22 +73,13 @@ namespace WhoAreYou_Xamarin.ViewModels
 
             if (string.IsNullOrEmpty(result))
             {
-                DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.network);
+                DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.existUser);
 
                 return;
             }
 
-
-            if(int.Parse(jsonService.ReadJson(result, Response.code)) == Response.Code.success)
-            {
-                DependencyService.Get<DIToastMessage>().Alert(SuccessMessage.signUp);
-                App.Current.MainPage = new LoginView();
-            }
-
-            else
-            {
-                DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.existUser);
-            }
+            DependencyService.Get<DIToastMessage>().Alert(SuccessMessage.signUp);
+            App.Current.MainPage = new LoginView();
 
         }
     }
