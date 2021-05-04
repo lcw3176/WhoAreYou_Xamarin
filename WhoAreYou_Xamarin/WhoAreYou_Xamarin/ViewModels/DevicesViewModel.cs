@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using WhoAreYou_Xamarin.Models;
 using WhoAreYou_Xamarin.Models.Property;
-using WhoAreYou_Xamarin.Models.Response;
 using WhoAreYou_Xamarin.Models.Url;
 using WhoAreYou_Xamarin.Services;
 using WhoAreYou_Xamarin.Services.Dependencies;
@@ -17,9 +16,9 @@ namespace WhoAreYou_Xamarin.ViewModels
     class DevicesViewModel : BaseViewModel
     {
         public ObservableCollection<Devices> deviceCollection { get; set; } = new ObservableCollection<Devices>();
-        private WebService webService = new WebService();
-        private PropertyService propertyService = new PropertyService();
-        private JsonService jsonService = new JsonService();
+        private readonly WebService webService = new WebService();
+        private readonly PropertyService propertyService = new PropertyService();
+        private readonly JsonService jsonService = new JsonService();
 
         public ICommand addDeviceCommand { get; set; }
         public ICommand searchLogCommand { get; set; }
@@ -91,7 +90,7 @@ namespace WhoAreYou_Xamarin.ViewModels
 
             string result = await webService.SendDeleteWithToken(Urls.DEVICE, token, email, deviceName);
 
-            if(jsonService.ReadJson(result, Response.code) == Response.Code.success.ToString())
+            if(!string.IsNullOrEmpty(result))
             {
                 Init();
             }
@@ -106,35 +105,32 @@ namespace WhoAreYou_Xamarin.ViewModels
 
             string result = await webService.SendGetWithToken(Urls.DEVICE, token, email);
 
-            
-            if(jsonService.ReadJson(result, Response.code) == Response.Code.success.ToString())
-            {
-                string jarr = jsonService.ReadJson(result, Response.result);
-                var nameList = jsonService.ReadJArray(jarr, Property.Device.name);
-
-                for (int i = 0; i < nameList.Count; i++)
-                {
-                    deviceCollection.Add(new Devices()
-                    {
-                        index = i + 1,
-                        name = nameList[i],
-                        searchLogCommand = searchLogCommand,
-                        deleteCommand = deleteCommand
-                    });
-                }
-
-                if (!DependencyService.Get<DIForeground>().IsRunning())
-                {
-                    DependencyService.Get<DIForeground>().StartService();
-                }
-            }
-
-            else
+            if(string.IsNullOrEmpty(result))
             {
                 deviceCollection.Add(new Devices()
                 {
                     name = "추가된 기기가 없습니다.",
                 });
+
+                return;
+            }
+
+            var nameList = jsonService.ReadJArray(result, Property.Device.name);
+
+            for (int i = 0; i < nameList.Count; i++)
+            {
+                deviceCollection.Add(new Devices()
+                {
+                    index = i + 1,
+                    name = nameList[i],
+                    searchLogCommand = searchLogCommand,
+                    deleteCommand = deleteCommand
+                });
+            }
+
+            if (!DependencyService.Get<DIForeground>().IsRunning())
+            {
+                DependencyService.Get<DIForeground>().StartService();
             }
         }
     }
