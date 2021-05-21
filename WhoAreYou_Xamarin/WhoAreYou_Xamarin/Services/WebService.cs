@@ -151,7 +151,7 @@ namespace WhoAreYou_Xamarin.Services
 
         }
 
-        public async Task<string> SendDeleteWithToken(string address, string token, params string[] values)
+        public async Task<bool> SendDeleteWithToken(string address, string token, params string[] values)
         {
             try
             {
@@ -174,11 +174,11 @@ namespace WhoAreYou_Xamarin.Services
                         {
                             using (HttpContent content = response.Content)
                             {
-                                return await content.ReadAsStringAsync();
+                                return true;
                             }
                         }
 
-                        return string.Empty;
+                        return false;
                     }
 
                 }
@@ -186,7 +186,7 @@ namespace WhoAreYou_Xamarin.Services
 
             catch
             {
-                return string.Empty;
+                return false;
             }
 
         }

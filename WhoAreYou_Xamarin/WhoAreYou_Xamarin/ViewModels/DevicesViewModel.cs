@@ -88,9 +88,9 @@ namespace WhoAreYou_Xamarin.ViewModels
             string email = propertyService.Read(Property.User.email).ToString();
             string token = propertyService.Read(Property.User.token).ToString();
 
-            string result = await webService.SendDeleteWithToken(Urls.DEVICE, token, email, deviceName);
+            bool result = await webService.SendDeleteWithToken(Urls.DEVICE, token, email, deviceName);
 
-            if(!string.IsNullOrEmpty(result))
+            if(result)
             {
                 Init();
             }

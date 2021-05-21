@@ -24,43 +24,29 @@
                         <StackLayout Orientation="Horizontal"
                                      VerticalOptions="Center"
                                      Margin="5">
-                            <Button Text="{Binding index}"
+                            <Label Text="{Binding index}"
                                     FontSize="Medium"
-                                    WidthRequest="50"
-                                    BackgroundColor="WhiteSmoke"
-                                    BorderWidth="1"
-                                    BorderColor="Black"
-                                    CornerRadius="30"
+                                    WidthRequest="30"
                                     Margin="10"
-                                    TextColor="Black"
-                                    Command="{Binding searchLogCommand}"
-                                    CommandParameter="{Binding name}"/>
+                                   VerticalOptions="Center"
+                                    TextColor="Black"/>
 
                             <Label Text="{Binding name}"
                                    FontSize="Medium"
                                    TextColor="Black"
+                                   HorizontalOptions="Start"
                                    VerticalOptions="CenterAndExpand"/>
 
-                            <!--<StackLayout Orientation="Vertical"
-                                         Margin="2">
-                                <Label Text="{Binding name}"
-                                   FontSize="Small"/>-->
-                            <!--<StackLayout Orientation="Horizontal">
-                                    <Label Text="마지막 기록: "
-                                       FontSize="Micro"/>
-                                    <Label Text="{Binding lastLog}"
-                                       FontSize="Micro"/>
-                                </StackLayout>-->
 
-                            <!--</StackLayout>-->
+                            <Button Text="기록보기"
+                                    Command="{Binding searchLogCommand}"
+                                    CommandParameter="{Binding name}"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="EndAndExpand"
+                                    BackgroundColor="AliceBlue"
+                                    BorderWidth="0"
+                                    TextColor="Black"/>
                         </StackLayout>
-
-                        <!--<ViewCell.ContextActions>
-                            <MenuItem Text="기록 조회"
-                                      Command="{Binding searchLogCommand}"
-                                      CommandParameter="{Binding name}"/>
-                        </ViewCell.ContextActions>-->
-
                         <ViewCell.ContextActions>
                             <MenuItem Text="등록 해제"
                                       Command="{Binding deleteCommand}"

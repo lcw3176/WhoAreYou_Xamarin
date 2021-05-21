@@ -6,6 +6,7 @@ using WhoAreYou_Xamarin.Views;
 using Xamarin.Forms;
 using WhoAreYou_Xamarin.Models.Url;
 using WhoAreYou_Xamarin.Models.Property;
+using System;
 
 namespace WhoAreYou_Xamarin.ViewModels
 {

@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace WhoAreYou_Xamarin.ViewModels
 {
-    class BaseViewModel : INotifyPropertyChanged
+    public class BaseViewModel : INotifyPropertyChanged
     {
         protected static Queue<string> logQueue = new Queue<string>();
         protected static ManualResetEvent logController = new ManualResetEvent(false);

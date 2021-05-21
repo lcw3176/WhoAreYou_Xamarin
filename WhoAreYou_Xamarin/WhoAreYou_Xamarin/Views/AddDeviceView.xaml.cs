@@ -11,7 +11,7 @@ namespace WhoAreYou_Xamarin.Views
         public AddDeviceView()
         {
             InitializeComponent();
-            BindingContext = new AddDeviceViewModel();
+            BindingContext = AddDeviceViewModel.GetInstance();
         }
     }
 }

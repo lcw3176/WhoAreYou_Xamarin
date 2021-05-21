@@ -27,9 +27,9 @@
                      VerticalOptions="CenterAndExpand"
                      HorizontalOptions="FillAndExpand"
                      Grid.Row="1">
-            <Entry Placeholder="기기 별칭 입력  ex) 현관문, 창문 감시"
+            <Entry Placeholder="{Binding placeHolder}"
                    Margin="20, 0, 20, 0"
-                   Text="{Binding deviceNickName}"
+                   Text="{Binding connectionInfo}"
                    VerticalOptions="CenterAndExpand"
                    HorizontalOptions="FillAndExpand"/>
             
@@ -46,8 +46,8 @@
                 <DataTemplate>
                     <ViewCell>
                         <StackLayout Orientation="Horizontal"
-                                 VerticalOptions="Center"
-                                 Margin="10">
+                                     VerticalOptions="Center"
+                                     Margin="10">
 
                             <StackLayout Orientation="Vertical">
                                 <Label Text="{Binding name}"
@@ -67,7 +67,7 @@
                                     Command="{Binding itemClickCommand}"
                                     CommandParameter="{Binding name}"
                                     VerticalOptions="Center"
-                                    HorizontalOptions="End"
+                                    HorizontalOptions="EndAndExpand"
                                     BackgroundColor="AliceBlue"
                                     BorderWidth="0"
                                     TextColor="Black"/>

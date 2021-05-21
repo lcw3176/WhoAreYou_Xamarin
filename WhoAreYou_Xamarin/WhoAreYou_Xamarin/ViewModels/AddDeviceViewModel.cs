@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Threading;
 using System.Windows.Input;
 using WhoAreYou_Xamarin.Models;
 using WhoAreYou_Xamarin.Services.Dependencies;
@@ -9,13 +7,35 @@ using Xamarin.Forms;
 
 namespace WhoAreYou_Xamarin.ViewModels
 {
-    class AddDeviceViewModel : BaseViewModel
+    public class AddDeviceViewModel : BaseViewModel
     {
         private bool run = false;  // Activity Indicator 컨트롤
-
-        public string deviceNickName { get; set; } = string.Empty;
+        private string _placeHolder;
+        public string bluetoothPlaceHolder = "기기 별칭 입력  ex) 현관문, 창문 감시";
+        public string wifiPlaceHolder = "와이파이 비밀번호 입력";
+        public string placeHolder
+        {
+            get { return _placeHolder; }
+            set
+            {
+                _placeHolder = value;
+                OnPropertyUpdate("placeHolder");
+            }
+        }
+        private string deviceNickName = string.Empty;
+        private string _connectionInfo;
+        public string connectionInfo
+        {
+            get { return _connectionInfo; }
+            set
+            {
+                _connectionInfo = value;
+                OnPropertyUpdate("connectionInfo");
+            }
+        }
         public ObservableCollection<Wireless> wirelessCollection { get; set; } = new ObservableCollection<Wireless>();
-        public ICommand itemClickCommand { get; set; }        
+        public ICommand bluetoothClickCommand { get; set; }
+        public ICommand wifiClickCommand { get; set; }
         public bool isRun 
         {
             get { return run; }
@@ -26,10 +46,27 @@ namespace WhoAreYou_Xamarin.ViewModels
             }
         }
 
+        private static AddDeviceViewModel instance;
 
-        public AddDeviceViewModel()
+        public static AddDeviceViewModel GetInstance()
         {
-            if(!DependencyService.Get<DIBluetooth>().IsEnable())
+            if(instance == null)
+            {
+                instance = new AddDeviceViewModel();
+            }
+
+            return instance;
+        }
+
+        private AddDeviceViewModel()
+        {
+            Init();
+        }
+
+        private void Init()
+        {
+            placeHolder = bluetoothPlaceHolder;
+            if (!DependencyService.Get<DIBluetooth>().IsEnable())
             {
                 DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.Bluetooth.Disabled);
                 return;
@@ -41,7 +78,8 @@ namespace WhoAreYou_Xamarin.ViewModels
                 return;
             }
 
-            itemClickCommand = new Command(ItemClickExecuteMethod);
+            bluetoothClickCommand = new Command(ItemClickBluetoothMethod);
+            wifiClickCommand = new Command(ItemClickWifiMethod);
 
             List<string> names = DependencyService.Get<DIBluetooth>().GetAllDevicesName();
             List<string> types = DependencyService.Get<DIBluetooth>().GetAllDevicesType();
@@ -52,20 +90,38 @@ namespace WhoAreYou_Xamarin.ViewModels
                 {
                     name = names[i],
                     type = types[i],
-                    itemClickCommand = this.itemClickCommand
+                    itemClickCommand = this.bluetoothClickCommand
                 });
             }
+        }
+
+        public async void ItemClickWifiMethod(object wifiName)
+        {
+            isRun = true;
+
+            //if (!await DependencyService.Get<DIBluetooth>().SetDevice(wifiName.ToString(), connectionInfo))
+            //{
+            //    DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.Wifi.ConnectionFailed);
+            //    isRun = false;
+
+            //    return;
+            //}
+
+            EnqueueDevice(deviceNickName);
+            isRun = false;
+            Init();
+            await App.Current.MainPage.Navigation.PopToRootAsync();
         }
 
         /// <summary>
         /// listview 아이템 클릭 시 장치의 블루투스와 연결 
         /// </summary>
         /// <param name="deviceName">장치 이름</param>
-        private async void ItemClickExecuteMethod(object deviceName)
+        private async void ItemClickBluetoothMethod(object deviceName)
         {
             isRun = true;
 
-            if(string.IsNullOrEmpty(deviceNickName))
+            if (string.IsNullOrEmpty(connectionInfo))
             {
                 DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.empty);
                 isRun = false;
@@ -73,46 +129,39 @@ namespace WhoAreYou_Xamarin.ViewModels
                 return;
             }
 
-            foreach(var i in DevicesViewModel.GetInstance().deviceCollection)
-            {
-                if(i.name == deviceNickName)
-                {
-                    DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.Bluetooth.alreadyExist);
-                    isRun = false;
+            //foreach(var i in DevicesViewModel.GetInstance().deviceCollection)
+            //{
+            //    if(i.name == connectionInfo)
+            //    {
+            //        DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.Bluetooth.alreadyExist);
+            //        isRun = false;
 
-                    return;
-                }
-                
-            }
+            //        return;
+            //    }
 
-            if (DependencyService.Get<DIBluetooth>().isConnect())
-            {
-                DependencyService.Get<DIBluetooth>().DisconnectDevice();
-            }
+            //}
 
-            if (!await DependencyService.Get<DIBluetooth>().ConnectDevice(deviceName.ToString()))
-            {
-                DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.Bluetooth.ConnectionFailed);
-                isRun = false;
+            //if (DependencyService.Get<DIBluetooth>().isConnect())
+            //{
+            //    DependencyService.Get<DIBluetooth>().DisconnectDevice();
+            //}
 
-                return;
-            }
+            //if (!await DependencyService.Get<DIBluetooth>().ConnectDevice(deviceName.ToString()))
+            //{
+            //    DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.Bluetooth.ConnectionFailed);
+            //    isRun = false;
 
-            string ssid = DependencyService.Get<DIWifi>().GetSSID();
-            Console.WriteLine(ssid);
+            //    return;
+            //}
 
-            if (!await DependencyService.Get<DIBluetooth>().SetDevice(ssid, "123123"))
-            {
-                DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.Wifi.ConnectionFailed);
-                isRun = false;
-
-                return;
-            }
-
-            EnqueueDevice(deviceNickName);
+            deviceNickName = connectionInfo;
+            wirelessCollection.Clear();
             isRun = false;
-            await App.Current.MainPage.Navigation.PopToRootAsync();
-            
+            placeHolder = wifiPlaceHolder;
+            DependencyService.Get<DIWifi>().StartScanWiFi();
+            connectionInfo = string.Empty;
+            //DependencyService.Get<DIWifi>().GetSSID();
+
         }
 
      
