@@ -3,6 +3,6 @@
     public interface DIWifi
     {
         bool IsEnable();
-        string GetSSID();
+        void StartScanWiFi();
     }
 }
