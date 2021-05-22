@@ -4,7 +4,6 @@ using WhoAreYou_Xamarin.Models;
 using WhoAreYou_Xamarin.Models.Property;
 using WhoAreYou_Xamarin.Models.Url;
 using WhoAreYou_Xamarin.Services;
-using WhoAreYou_Xamarin.Services.Dependencies;
 using WhoAreYou_Xamarin.Views;
 using Xamarin.Forms;
 
@@ -55,7 +54,7 @@ namespace WhoAreYou_Xamarin.ViewModels
 
             if(string.IsNullOrEmpty(id) || string.IsNullOrEmpty(pw))
             {
-                DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.empty);
+                MessageService.Show(ErrorMessage.empty);
                 
                 return;
             }
@@ -73,12 +72,12 @@ namespace WhoAreYou_Xamarin.ViewModels
 
             if (string.IsNullOrEmpty(result))
             {
-                DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.existUser);
+                MessageService.Show(ErrorMessage.existUser);
 
                 return;
             }
 
-            DependencyService.Get<DIToastMessage>().Alert(SuccessMessage.signUp);
+            MessageService.Show(SuccessMessage.signUp);
             App.Current.MainPage = new LoginView();
 
         }

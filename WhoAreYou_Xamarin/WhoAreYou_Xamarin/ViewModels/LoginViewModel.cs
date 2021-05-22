@@ -1,12 +1,10 @@
 ﻿using System.Windows.Input;
 using WhoAreYou_Xamarin.Models;
-using WhoAreYou_Xamarin.Services.Dependencies;
 using WhoAreYou_Xamarin.Services;
 using WhoAreYou_Xamarin.Views;
 using Xamarin.Forms;
 using WhoAreYou_Xamarin.Models.Url;
 using WhoAreYou_Xamarin.Models.Property;
-using System;
 
 namespace WhoAreYou_Xamarin.ViewModels
 {
@@ -72,7 +70,7 @@ namespace WhoAreYou_Xamarin.ViewModels
 
             if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(pw))
             {
-                DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.empty);
+                MessageService.Show(ErrorMessage.empty);
                 
                 return;
             }
@@ -84,7 +82,7 @@ namespace WhoAreYou_Xamarin.ViewModels
 
             if(string.IsNullOrEmpty(responseToken))
             {
-                DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.notMember);
+                MessageService.Show(ErrorMessage.notMember);
                 
                 return;
             }
