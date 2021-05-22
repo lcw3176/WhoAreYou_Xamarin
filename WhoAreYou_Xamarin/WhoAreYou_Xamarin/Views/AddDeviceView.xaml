@@ -7,7 +7,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="1.*"/>
             <RowDefinition Height="0.5*"/>
-            <RowDefinition Height="8.*"/>
+            <RowDefinition Height="7.*"/>
+            <RowDefinition Height="0.7*"/>
         </Grid.RowDefinitions>
         <ActivityIndicator IsRunning="{Binding isRun}"
                            IsVisible="true"
@@ -16,7 +17,7 @@
                            Color="Black"
                            Grid.RowSpan="3"/>
 
-        <Label Text="페어링 된 기기"
+        <Label Text="{Binding statusText}"
                FontSize="Medium"
                VerticalOptions="Center"
                HorizontalOptions="CenterAndExpand"
@@ -90,6 +91,13 @@
                 </Style>
             </ListView.Resources>
         </ListView>
+
+        <Button Grid.Row="3"
+                Text="새로고침"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Command="{Binding refreshCommand}"/>
+        
     </Grid>
    
 </ContentPage>
