@@ -1,5 +1,6 @@
 ﻿using Android.Content;
 using Android.Net.Wifi;
+using System;
 using System.Collections.Generic;
 using WhoAreYou_Xamarin.Droid.Services.Dependencies;
 using WhoAreYou_Xamarin.Models;
@@ -14,7 +15,6 @@ namespace WhoAreYou_Xamarin.Droid.Services.Dependencies
     {
         private static WifiManager wifiManager;
         private WifiReceiver wifiReceiver;
-        public static List<string> wifiNetworks;
 
         public DWifi()
         {
@@ -28,10 +28,11 @@ namespace WhoAreYou_Xamarin.Droid.Services.Dependencies
 
         public void StartScanWiFi()
         {
-            wifiNetworks = new List<string>();
             wifiReceiver = new WifiReceiver();
+            IntentFilter intent = new IntentFilter(WifiManager.ScanResultsAvailableAction);
+            intent.AddAction(WifiManager.NetworkStateChangedAction);
 
-            Android.App.Application.Context.RegisterReceiver(wifiReceiver, new IntentFilter(WifiManager.ScanResultsAvailableAction));
+            Android.App.Application.Context.RegisterReceiver(wifiReceiver, intent);
             wifiManager.StartScan();
         }
 
@@ -40,23 +41,45 @@ namespace WhoAreYou_Xamarin.Droid.Services.Dependencies
             
             public override void OnReceive(Context context, Intent intent)
             {
-                
                 IList<ScanResult> scanResults = wifiManager.ScanResults;
+                string dbm;
 
-                foreach(ScanResult i in scanResults)
+                foreach (ScanResult i in scanResults)
                 {
-                    if(!string.IsNullOrEmpty(i.Ssid))
+                    if (!string.IsNullOrEmpty(i.Ssid))
                     {
+                        foreach(var j in AddDeviceViewModel.GetInstance().wirelessCollection)
+                        {
+                            if(j.name == i.Ssid)
+                            {
+                                return;
+                            }
+                        }
+
+                        if (i.Level < 0 && i.Level >= -80)
+                        {
+                            dbm = "좋음";
+                        }
+
+                        else if(i.Level < -80 && i.Level >= -90)
+                        {
+                            dbm = "보통";
+                        }
+
+                        else
+                        {
+                            dbm = "나쁨";
+                        }
+
                         AddDeviceViewModel.GetInstance().wirelessCollection.Add(new Wireless()
                         {
                             name = i.Ssid,
-                            type = i.Frequency.ToString(),
+                            type = dbm,
                             itemClickCommand = AddDeviceViewModel.GetInstance().wifiClickCommand
                         });
                     }
-
-                    //wifiNetworks.Add(i.Ssid);
                 }
+
             }
         }
         
