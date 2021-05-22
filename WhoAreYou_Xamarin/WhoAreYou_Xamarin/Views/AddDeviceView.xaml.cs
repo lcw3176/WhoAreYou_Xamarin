@@ -12,6 +12,7 @@ namespace WhoAreYou_Xamarin.Views
         {
             InitializeComponent();
             BindingContext = AddDeviceViewModel.GetInstance();
+            AddDeviceViewModel.GetInstance().Init();
         }
     }
 }
