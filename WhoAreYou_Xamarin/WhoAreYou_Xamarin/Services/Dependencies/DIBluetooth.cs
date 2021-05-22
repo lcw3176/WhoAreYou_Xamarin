@@ -9,9 +9,7 @@ namespace WhoAreYou_Xamarin.Services.Dependencies
         Task<bool> ConnectDevice(string deviceName);
         List<string> GetAllDevicesName();
         List<string> GetAllDevicesType();
-        Task<bool> SetDevice(string ssid, string pw);
-        bool isConnect();
-        bool DisconnectDevice();
+        Task<bool> SendInfo(string data);
 
     }
 }
