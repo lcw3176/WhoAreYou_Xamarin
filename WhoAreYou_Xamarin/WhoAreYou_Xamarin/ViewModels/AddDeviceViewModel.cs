@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using WhoAreYou_Xamarin.Models;
+using WhoAreYou_Xamarin.Services;
 using WhoAreYou_Xamarin.Services.Dependencies;
 using Xamarin.Forms;
 
@@ -11,8 +12,23 @@ namespace WhoAreYou_Xamarin.ViewModels
     {
         private bool run = false;  // Activity Indicator 컨트롤
         private string _placeHolder;
+        private string _statusText;
+        public string bluetoothStatus = "페어링 된 기기목록";
         public string bluetoothPlaceHolder = "기기 별칭 입력  ex) 현관문, 창문 감시";
+
+        public string wifiStatus = "와이파이 검색 목록";
         public string wifiPlaceHolder = "와이파이 비밀번호 입력";
+
+        public string statusText
+        {
+            get { return _statusText; }
+            set
+            {
+                _statusText = value;
+                OnPropertyUpdate("statusText");
+            }
+        }
+
         public string placeHolder
         {
             get { return _placeHolder; }
@@ -36,6 +52,7 @@ namespace WhoAreYou_Xamarin.ViewModels
         public ObservableCollection<Wireless> wirelessCollection { get; set; } = new ObservableCollection<Wireless>();
         public ICommand bluetoothClickCommand { get; set; }
         public ICommand wifiClickCommand { get; set; }
+        public ICommand refreshCommand { get; set; }
         public bool isRun 
         {
             get { return run; }
@@ -50,7 +67,7 @@ namespace WhoAreYou_Xamarin.ViewModels
 
         public static AddDeviceViewModel GetInstance()
         {
-            if(instance == null)
+            if (instance == null)
             {
                 instance = new AddDeviceViewModel();
             }
@@ -60,27 +77,44 @@ namespace WhoAreYou_Xamarin.ViewModels
 
         private AddDeviceViewModel()
         {
-            Init();
+            bluetoothClickCommand = new Command(ItemClickBluetoothMethod);
+            wifiClickCommand = new Command(ItemClickWifiMethod);
+            refreshCommand = new Command(RefreshExecuteMethod);
         }
 
-        private void Init()
+        private void RefreshExecuteMethod(object obj)
         {
+            if(statusText == bluetoothStatus)
+            {
+                Init();
+            }
+
+            else
+            {
+                wirelessCollection.Clear();
+                DependencyService.Get<DIWifi>().StartScanWiFi();
+            }
+        }
+
+        public void Init()
+        {
+            wirelessCollection.Clear();
             placeHolder = bluetoothPlaceHolder;
+            statusText = bluetoothStatus;
+
             if (!DependencyService.Get<DIBluetooth>().IsEnable())
             {
-                DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.Bluetooth.Disabled);
+                MessageService.Show(ErrorMessage.Bluetooth.Disabled);
                 return;
             }
 
             if (!DependencyService.Get<DIWifi>().IsEnable())
             {
-                DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.Wifi.Disabled);
+                MessageService.Show(ErrorMessage.Wifi.Disabled);
                 return;
             }
 
-            bluetoothClickCommand = new Command(ItemClickBluetoothMethod);
-            wifiClickCommand = new Command(ItemClickWifiMethod);
-
+            
             List<string> names = DependencyService.Get<DIBluetooth>().GetAllDevicesName();
             List<string> types = DependencyService.Get<DIBluetooth>().GetAllDevicesType();
 
@@ -95,13 +129,17 @@ namespace WhoAreYou_Xamarin.ViewModels
             }
         }
 
+        /// <summary>
+        /// 연결된 블루투스 장치에게 와이파이 정보 넘겨주기
+        /// </summary>
+        /// <param name="wifiName"></param>
         public async void ItemClickWifiMethod(object wifiName)
         {
             isRun = true;
 
             //if (!await DependencyService.Get<DIBluetooth>().SetDevice(wifiName.ToString(), connectionInfo))
             //{
-            //    DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.Wifi.ConnectionFailed);
+            //    MessageService.Show(ErrorMessage.Wifi.ConnectionFailed);
             //    isRun = false;
 
             //    return;
@@ -109,7 +147,6 @@ namespace WhoAreYou_Xamarin.ViewModels
 
             EnqueueDevice(deviceNickName);
             isRun = false;
-            Init();
             await App.Current.MainPage.Navigation.PopToRootAsync();
         }
 
@@ -123,7 +160,7 @@ namespace WhoAreYou_Xamarin.ViewModels
 
             if (string.IsNullOrEmpty(connectionInfo))
             {
-                DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.empty);
+                MessageService.Show(ErrorMessage.empty);
                 isRun = false;
 
                 return;
@@ -133,7 +170,7 @@ namespace WhoAreYou_Xamarin.ViewModels
             //{
             //    if(i.name == connectionInfo)
             //    {
-            //        DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.Bluetooth.alreadyExist);
+            //        MessageService.Show(ErrorMessage.Bluetooth.alreadyExist);
             //        isRun = false;
 
             //        return;
@@ -141,14 +178,9 @@ namespace WhoAreYou_Xamarin.ViewModels
 
             //}
 
-            //if (DependencyService.Get<DIBluetooth>().isConnect())
-            //{
-            //    DependencyService.Get<DIBluetooth>().DisconnectDevice();
-            //}
-
             //if (!await DependencyService.Get<DIBluetooth>().ConnectDevice(deviceName.ToString()))
             //{
-            //    DependencyService.Get<DIToastMessage>().Alert(ErrorMessage.Bluetooth.ConnectionFailed);
+            //    MessageService.Show(ErrorMessage.Bluetooth.ConnectionFailed);
             //    isRun = false;
 
             //    return;
@@ -157,11 +189,13 @@ namespace WhoAreYou_Xamarin.ViewModels
             deviceNickName = connectionInfo;
             wirelessCollection.Clear();
             isRun = false;
+            
             placeHolder = wifiPlaceHolder;
-            DependencyService.Get<DIWifi>().StartScanWiFi();
+            statusText = wifiStatus;
             connectionInfo = string.Empty;
-            //DependencyService.Get<DIWifi>().GetSSID();
 
+            DependencyService.Get<DIWifi>().StartScanWiFi();
+            
         }
 
      
