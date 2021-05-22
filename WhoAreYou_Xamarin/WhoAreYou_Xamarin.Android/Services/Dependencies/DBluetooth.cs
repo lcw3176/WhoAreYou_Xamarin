@@ -24,6 +24,11 @@ namespace WhoAreYou_Xamarin.Droid.Services.Dependencies
 
         public async Task<bool> ConnectDevice(string deviceName)
         {
+            if(isConnect())
+            {
+                DisconnectDevice();
+            }
+
             BluetoothDevice device = null;
 
             foreach(var i in adapter.BondedDevices)
@@ -80,9 +85,9 @@ namespace WhoAreYou_Xamarin.Droid.Services.Dependencies
             return lst;
         }
 
-        public async Task<bool> SetDevice(string ssid, string pw)
+        public async Task<bool> SendInfo(string data)
         {
-            Java.Lang.String msg = new Java.Lang.String(ssid);
+            Java.Lang.String msg = new Java.Lang.String(data);
 
             byte[] buffer = msg.GetBytes();
 
@@ -100,7 +105,7 @@ namespace WhoAreYou_Xamarin.Droid.Services.Dependencies
             
         }
 
-        public bool isConnect()
+        private bool isConnect()
         {
             if(socket != null)
             {
@@ -110,7 +115,7 @@ namespace WhoAreYou_Xamarin.Droid.Services.Dependencies
             return false;
         }   
 
-        public bool DisconnectDevice()
+        private bool DisconnectDevice()
         {
             try
             {
