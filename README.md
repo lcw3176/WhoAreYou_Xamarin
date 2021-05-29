@@ -48,3 +48,11 @@ Microprocessor TeamProject Mobile Application
     <image src="https://user-images.githubusercontent.com/59993347/118150254-4ea74a80-b44d-11eb-8520-ee037d3fb0b4.jpg" width="30%">
     <image src="https://user-images.githubusercontent.com/59993347/118150259-4f3fe100-b44d-11eb-9f1b-b15bc5daf4ce.jpg" width="30%">
 </div>
+
+- - -
+#### 블루투스 연결, 와이파이 연결, 푸시 알람
+<div>
+    <image src="https://user-images.githubusercontent.com/59993347/120073825-f1f69180-c0d4-11eb-8f50-ecb28404cc93.jpg" width="30%">
+    <image src="https://user-images.githubusercontent.com/59993347/120073828-f3c05500-c0d4-11eb-97e5-cf33fd05b72f.jpg" width="30%">
+    <image src="https://user-images.githubusercontent.com/59993347/120073830-f4f18200-c0d4-11eb-8fda-bf48b1bef5d0.jpg" width="30%">
+</div>
