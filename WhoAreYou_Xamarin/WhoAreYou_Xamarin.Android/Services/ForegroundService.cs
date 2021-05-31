@@ -2,6 +2,8 @@
 using Android.Content;
 using Android.Graphics;
 using Android.OS;
+using System.Threading;
+using System.Threading.Tasks;
 using WhoAreYou_Xamarin.Models.Property;
 using WhoAreYou_Xamarin.Services;
 
@@ -10,8 +12,8 @@ namespace WhoAreYou_Xamarin.Droid.Services
     [Service]
     public class ForegroundService : Service
     {
-        private string channelName = "socketChannel";
-        private string channelId = "socketId";
+        private static readonly string channelName = "socketChannel";
+        private static readonly string channelId = "socketId";
         private const int ID = 2000;
 
         public override IBinder OnBind(Intent intent)
@@ -19,13 +21,21 @@ namespace WhoAreYou_Xamarin.Droid.Services
             return null;
         }
 
+
+
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
         {
             Init();
-            return StartCommandResult.Sticky;
+
+            if (!SocketService.GetInstance().IsConnect())
+            {
+                SocketService.GetInstance().StartReceive();
+            }
+
+            return StartCommandResult.RedeliverIntent;
         }
 
-        private async void Init()
+        private void Init()
         {
             Intent defaultIntent = new Intent(Application.Context, typeof(MainActivity));
             defaultIntent.PutExtra("goToMain", "goToMain");
@@ -51,17 +61,6 @@ namespace WhoAreYou_Xamarin.Droid.Services
 
                 manager.CreateNotificationChannel(channel);
 
-            }
-
-            if (!SocketService.IsConnect())
-            {
-                PropertyService propertyService = new PropertyService();
-                bool result = await SocketService.Connect(propertyService.Read(Property.User.token).ToString());
-
-                if (result)
-                {
-                    SocketService.StartReceive();
-                }
             }
 
             StartForeground(ID, notification);
