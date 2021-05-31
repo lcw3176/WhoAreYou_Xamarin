@@ -13,12 +13,12 @@ namespace WhoAreYou_Xamarin.Models
             {
                 if(state)
                 {
-                    return "열림";
+                    return "닫힘";
                 }
 
                 else
                 {
-                    return "닫힘";
+                    return "열림";
                 }
             } 
         }
