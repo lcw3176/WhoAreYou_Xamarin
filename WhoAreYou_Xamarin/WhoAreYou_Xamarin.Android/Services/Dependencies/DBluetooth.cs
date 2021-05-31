@@ -1,8 +1,12 @@
 ﻿using Android.Bluetooth;
 using Android.Locations;
 using Java.Util;
+using System;
 using System.Collections.Generic;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using WhoAreYou_Xamarin.Models.Enum;
 using WhoAreYou_Xamarin.Services.Dependencies;
 using Xamarin.Forms;
 
@@ -85,16 +89,37 @@ namespace WhoAreYou_Xamarin.Droid.Services.Dependencies
             return lst;
         }
 
-        public async Task<bool> SendInfo(string data)
+        public async Task<bool> SendInfo(Dictionary<BLECommand, string> data)
         {
-            Java.Lang.String msg = new Java.Lang.String(data);
+            string startFlag = "<start>";
+            string endFlag = "<end>";
 
-            byte[] buffer = msg.GetBytes();
+            StringBuilder sb = new StringBuilder();
 
             try
             {
-                await socket.OutputStream.WriteAsync(buffer, 0, buffer.Length);
+                foreach(var i in data)
+                {
+                    sb.Append(startFlag);
+                    sb.Append("/");
+                    sb.Append((int)i.Key);
+                    sb.Append("/");
+                    sb.Append(i.Value);
+                    sb.Append("/");
+                    sb.Append(endFlag);
 
+                    Java.Lang.String msg = new Java.Lang.String(sb.ToString());
+
+                    byte[] buffer = msg.GetBytes();
+
+                    await socket.OutputStream.WriteAsync(buffer, 0, buffer.Length);
+                    sb.Clear();
+
+                    Thread.Sleep(1000);
+
+                }
+               
+                
                 return true;
             }
 
