@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using WhoAreYou_Xamarin.Models.Enum;
 
 namespace WhoAreYou_Xamarin.Services.Dependencies
 {
@@ -9,7 +10,7 @@ namespace WhoAreYou_Xamarin.Services.Dependencies
         Task<bool> ConnectDevice(string deviceName);
         List<string> GetAllDevicesName();
         List<string> GetAllDevicesType();
-        Task<bool> SendInfo(string data);
+        Task<bool> SendInfo(Dictionary<BLECommand, string> data);
 
     }
 }
