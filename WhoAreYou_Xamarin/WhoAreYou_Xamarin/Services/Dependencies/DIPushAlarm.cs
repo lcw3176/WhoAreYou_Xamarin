@@ -3,5 +3,6 @@
     public interface DIPushAlarm
     {
         void Update(string deviceName, bool isOpen);
+        void Create(string deviceName);
     }
 }
