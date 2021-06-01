@@ -6,19 +6,38 @@ using System.Threading.Tasks;
 using WhoAreYou_Xamarin.Models.Property;
 using WhoAreYou_Xamarin.Models.Url;
 using WhoAreYou_Xamarin.Services.Dependencies;
+using WhoAreYou_Xamarin.ViewModels;
 using Xamarin.Forms;
 
 namespace WhoAreYou_Xamarin.Services
 {
-    public static class SocketService
+    public class SocketService
     {
-        private static ClientWebSocket socket = new ClientWebSocket();
-        private static JsonService jsonService = new JsonService();
+        private ClientWebSocket socket = new ClientWebSocket();
+        private JsonService jsonService = new JsonService();
         private const string tokenHeaderName = "X-AUTH-TOKEN";
 
-        public static bool IsConnect()
+        private static SocketService instance;
+
+        public static SocketService GetInstance()
+        {
+            if(instance == null)
+            {
+                instance = new SocketService();
+            }
+
+            return instance;
+        }
+
+
+        public bool IsConnect()
         { 
-            if(socket.State != WebSocketState.Connecting)
+            if(socket == null)
+            {
+                socket = new ClientWebSocket();
+            }
+
+            if(socket.State != WebSocketState.Open)
             {
                 return false;
             }
@@ -26,18 +45,14 @@ namespace WhoAreYou_Xamarin.Services
             return true;
         }
 
-        public async static Task<bool> Connect(string token)
+        public async Task<bool> Connect(string token)
         {
 
             try
             {
-                if(socket.State != WebSocketState.Connecting)
-                {
-                    Uri uri = new Uri(Urls.SOCKET);
-                    socket.Options.SetRequestHeader(tokenHeaderName, token);
-                    await socket.ConnectAsync(uri, CancellationToken.None);
-                }
-                
+                Uri uri = new Uri(Urls.SOCKET);
+                socket.Options.SetRequestHeader(tokenHeaderName, token);
+                await socket.ConnectAsync(uri, CancellationToken.None);
 
                 return true;
             }
@@ -49,13 +64,14 @@ namespace WhoAreYou_Xamarin.Services
             
         }
 
-        public async static void StartReceive()
+        public async void StartReceive()
         {
             try
             {
                 PropertyService property = new PropertyService();
+                await Connect(property.Read(Property.User.token).ToString());
 
-                while (socket.State == WebSocketState.Open)
+                while (true)
                 {
                     ArraySegment<byte> bytes = new ArraySegment<byte>(new byte[1024]);
 
@@ -63,36 +79,41 @@ namespace WhoAreYou_Xamarin.Services
                     string values = Encoding.UTF8.GetString(bytes.Array, 0, result.Count);
 
                     string deviceName = jsonService.ReadJson(values, Property.Device.name);
-                    bool isOpen = bool.Parse(jsonService.ReadJson(values, Property.Log.state));
-                    bool userOpenAlert = bool.Parse(property.Read(Property.User.openAlert).ToString());
-                    bool userCloseAlert = bool.Parse(property.Read(Property.User.closeAlert).ToString());
+                    string state = jsonService.ReadJson(values, Property.Log.state);
 
-                    if ((isOpen && userOpenAlert) || (!isOpen && userCloseAlert))
+                    if(state == "create")
                     {
-                        DependencyService.Get<DIPushAlarm>().Update(deviceName, isOpen);
+                        DependencyService.Get<DIPushAlarm>().Create(deviceName);
+                        DevicesViewModel.GetInstance().Init();
                     }
 
-                    
-                    
+                    else
+                    {
+                        bool isClosed = bool.Parse(jsonService.ReadJson(values, Property.Log.state));
+                        bool userOpenAlert = bool.Parse(property.Read(Property.User.openAlert).ToString());
+                        bool userCloseAlert = bool.Parse(property.Read(Property.User.closeAlert).ToString());
+
+                        if ((isClosed && userOpenAlert) || (!isClosed && userCloseAlert))
+                        {
+                            DependencyService.Get<DIPushAlarm>().Update(deviceName, isClosed);
+                        }
+                    }
+                   
                 }
             }
 
             catch
             {
+                
+            }
+
+            finally
+            {
+                await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "status", CancellationToken.None);
+                socket.Dispose();
                 DependencyService.Get<DIForeground>().StopRun();
             }
 
-        }
-
-        static bool testValue = true;
-
-        public async static void Test()
-        {
-            string email = new PropertyService().Read(Property.User.email).ToString();
-            ArraySegment<byte> bytes = new ArraySegment<byte>(Encoding.UTF8.GetBytes(email + ",무야호," + testValue.ToString()));
-            await socket.SendAsync(bytes, WebSocketMessageType.Text, true, CancellationToken.None);
-
-            testValue = !testValue;
         }
     }
 }
