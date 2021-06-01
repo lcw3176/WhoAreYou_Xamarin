@@ -6,12 +6,12 @@ namespace WhoAreYou_Xamarin.Models
     {
 
         public DateTime time { get; set; }
-        public bool state { get; set; }
+        public bool isClosed { get; set; }
         public string stateString 
         {
             get 
             {
-                if(state)
+                if(isClosed)
                 {
                     return "닫힘";
                 }
