@@ -80,13 +80,13 @@ namespace WhoAreYou_Xamarin.ViewModels
             {
                 var stateList = jsonService.ReadJArray(result, Property.Log.state);
                 var timeList = jsonService.ReadJArray(result, Property.Log.time);
-                DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Local);
+                DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
                 for (int i = 0; i < stateList.Count; i++)
                 {
                     logCollection.Add(new Log()
                     {
-                        state = bool.Parse(stateList[i]),
+                        isClosed = bool.Parse(stateList[i]),
                         time = dt.AddMilliseconds(double.Parse(timeList[i]))
                                  .ToLocalTime()
                     });
