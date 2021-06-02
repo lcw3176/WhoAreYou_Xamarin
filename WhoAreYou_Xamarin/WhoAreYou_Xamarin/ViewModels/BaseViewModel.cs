@@ -9,9 +9,6 @@ namespace WhoAreYou_Xamarin.ViewModels
         protected static Queue<string> logQueue = new Queue<string>();
         protected static ManualResetEvent logController = new ManualResetEvent(false);
 
-        protected static Queue<string> deviceQueue = new Queue<string>();
-        protected static ManualResetEvent deviceController = new ManualResetEvent(false);
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyUpdate(string propertyName)
@@ -21,16 +18,6 @@ namespace WhoAreYou_Xamarin.ViewModels
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
 
-        }
-
-        /// <summary>
-        /// 새로운 기기 등록
-        /// </summary>
-        /// <param name="deviceName"></param>
-        protected void EnqueueDevice(string deviceName)
-        {
-            deviceQueue.Enqueue(deviceName);
-            deviceController.Set();
         }
 
 
