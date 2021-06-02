@@ -2,6 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using WhoAreYou_Xamarin.Models;
+using WhoAreYou_Xamarin.Models.Enum;
+using WhoAreYou_Xamarin.Models.Property;
 using WhoAreYou_Xamarin.Services;
 using WhoAreYou_Xamarin.Services.Dependencies;
 using Xamarin.Forms;
@@ -62,6 +64,8 @@ namespace WhoAreYou_Xamarin.ViewModels
                 OnPropertyUpdate("isRun");
             }
         }
+
+        private PropertyService propertyService = new PropertyService();
 
         private static AddDeviceViewModel instance;
 
@@ -137,16 +141,30 @@ namespace WhoAreYou_Xamarin.ViewModels
         {
             isRun = true;
 
-            //if (!await DependencyService.Get<DIBluetooth>().SetDevice(wifiName.ToString(), connectionInfo))
-            //{
-            //    MessageService.Show(ErrorMessage.Wifi.ConnectionFailed);
-            //    isRun = false;
+            if(string.IsNullOrEmpty(connectionInfo))
+            {
+                MessageService.Show(ErrorMessage.empty);
+                isRun = false;
+                return;
+            }
 
-            //    return;
-            //}
+            Dictionary<BLECommand, string> dic = new Dictionary<BLECommand, string>();
+            dic.Add(BLECommand.SetWiFiName, wifiName.ToString());
+            dic.Add(BLECommand.SetWiFiPassword, connectionInfo);
+            dic.Add(BLECommand.SetDeviceName, deviceNickName);
+            dic.Add(BLECommand.SetEmail, propertyService.Read(Property.User.email).ToString());
+            dic.Add(BLECommand.SetToken, propertyService.Read(Property.User.token).ToString());
 
-            EnqueueDevice(deviceNickName);
+            if (!await DependencyService.Get<DIBluetooth>().SendInfo(dic))
+            {
+                MessageService.Show(ErrorMessage.Wifi.ConnectionFailed);
+                isRun = false;
+
+                return;
+            }
+
             isRun = false;
+            connectionInfo = string.Empty;
             await App.Current.MainPage.Navigation.PopToRootAsync();
         }
 
@@ -166,25 +184,25 @@ namespace WhoAreYou_Xamarin.ViewModels
                 return;
             }
 
-            //foreach(var i in DevicesViewModel.GetInstance().deviceCollection)
-            //{
-            //    if(i.name == connectionInfo)
-            //    {
-            //        MessageService.Show(ErrorMessage.Bluetooth.alreadyExist);
-            //        isRun = false;
+            foreach (var i in DevicesViewModel.GetInstance().deviceCollection)
+            {
+                if (i.name == connectionInfo)
+                {
+                    MessageService.Show(ErrorMessage.Bluetooth.alreadyExist);
+                    isRun = false;
 
-            //        return;
-            //    }
+                    return;
+                }
 
-            //}
+            }
 
-            //if (!await DependencyService.Get<DIBluetooth>().ConnectDevice(deviceName.ToString()))
-            //{
-            //    MessageService.Show(ErrorMessage.Bluetooth.ConnectionFailed);
-            //    isRun = false;
+            if (!await DependencyService.Get<DIBluetooth>().ConnectDevice(deviceName.ToString()))
+            {
+                MessageService.Show(ErrorMessage.Bluetooth.ConnectionFailed);
+                isRun = false;
 
-            //    return;
-            //}
+                return;
+            }
 
             deviceNickName = connectionInfo;
             wirelessCollection.Clear();
