@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using WhoAreYou_Xamarin.Models;
 using WhoAreYou_Xamarin.Models.Property;
@@ -37,39 +34,11 @@ namespace WhoAreYou_Xamarin.ViewModels
 
         private DevicesViewModel()
         {
-            Init();
             addDeviceCommand = new Command(AddDeviceExecuteMethod);
             searchLogCommand = new Command(SearchLogExecuteMethod);
             deleteCommand = new Command(DeleteExecuteMethod);
-            Task.Run(() => DequeueDevice());
         }
 
-        /// <summary>
-        /// 장치 등록되면 리스트뷰에 추가
-        /// </summary>
-        private async void DequeueDevice()
-        {
-            try
-            {
-                while (true)
-                {
-                    while (deviceQueue.Count > 0)
-                    {
-                        Dictionary<string, string> dic = new Dictionary<string, string>();
-                        dic.Add(Property.User.email, propertyService.Read(Property.User.email).ToString());
-                        dic.Add(Property.Device.name, deviceQueue.Dequeue());
-
-                        await webService.SendPostWithToken(Urls.DEVICE, propertyService.Read(Property.User.token).ToString(), dic);
-                        Init();
-                    }
-
-                    deviceController.Reset();
-                    deviceController.WaitOne(Timeout.Infinite);
-                }
-            }
-
-            catch { }
-        }
 
         private async void SearchLogExecuteMethod(object deviceName)
         {
@@ -96,9 +65,14 @@ namespace WhoAreYou_Xamarin.ViewModels
             }
         }
 
-        private async void Init()
+        public async void Init()
         {
             deviceCollection.Clear();
+
+            if (!DependencyService.Get<DIForeground>().IsRunning())
+            {
+                DependencyService.Get<DIForeground>().StartService();
+            }
 
             string email = propertyService.Read(Property.User.email).ToString();
             string token = propertyService.Read(Property.User.token).ToString();
@@ -128,10 +102,6 @@ namespace WhoAreYou_Xamarin.ViewModels
                 });
             }
 
-            if (!DependencyService.Get<DIForeground>().IsRunning())
-            {
-                DependencyService.Get<DIForeground>().StartService();
-            }
         }
     }
 }
