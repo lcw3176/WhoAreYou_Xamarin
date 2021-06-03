@@ -22,8 +22,9 @@ Microprocessor TeamProject Mobile Application
     - App Property에서 JWT 읽어온 후 서버에 Validation Check 요청
     - 유효한 Token이면 자동 로그인
 
-* 기기 목록
-    - 인덱스 번호 클릭 시 바로 기록 조회 가능
+* 기기 목록 (21.06.03 수정)
+    - ~~인덱스 번호 클릭 시 바로 기록 조회 가능~~
+    - 기록 조회 버튼 각 항목마다 우측에 추가
 
 * 기록 보기
     - ListView에 열리고 닫힌 기록 표시됨
@@ -33,6 +34,7 @@ Microprocessor TeamProject Mobile Application
     - 로그아웃 시 Property의 Token 값 삭제
 
 ### 작동 모습 
+영상: https://www.youtube.com/watch?v=a5a6oeBi8YY
 - - -
 #### 로그인, 회원가입, Notification 등록
 <div>
