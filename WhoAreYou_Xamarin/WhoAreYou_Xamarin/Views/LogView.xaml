@@ -32,14 +32,14 @@
                                         <Style TargetType="Label">
                                             <Style.Triggers>
                                                 <DataTrigger TargetType="Label"
-                                                             Binding="{Binding state}"
+                                                             Binding="{Binding isClosed}"
                                                              Value="true">
                                                     <Setter Property="TextColor"
                                                             Value="Red"/>
                                                 </DataTrigger>
 
                                                 <DataTrigger TargetType="Label"
-                                                             Binding="{Binding state}"
+                                                             Binding="{Binding isClosed}"
                                                              Value="false">
                                                     <Setter Property="TextColor"
                                                             Value="Blue"/>
