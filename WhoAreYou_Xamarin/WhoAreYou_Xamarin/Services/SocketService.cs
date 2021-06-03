@@ -71,7 +71,7 @@ namespace WhoAreYou_Xamarin.Services
                 PropertyService property = new PropertyService();
                 await Connect(property.Read(Property.User.token).ToString());
 
-                while (true)
+                while (socket.State == WebSocketState.Open)
                 {
                     ArraySegment<byte> bytes = new ArraySegment<byte>(new byte[1024]);
 
@@ -93,7 +93,7 @@ namespace WhoAreYou_Xamarin.Services
                         bool userOpenAlert = bool.Parse(property.Read(Property.User.openAlert).ToString());
                         bool userCloseAlert = bool.Parse(property.Read(Property.User.closeAlert).ToString());
 
-                        if ((isClosed && userOpenAlert) || (!isClosed && userCloseAlert))
+                        if ((!isClosed && userOpenAlert) || (isClosed && userCloseAlert))
                         {
                             DependencyService.Get<DIPushAlarm>().Update(deviceName, isClosed);
                         }
@@ -109,7 +109,6 @@ namespace WhoAreYou_Xamarin.Services
 
             finally
             {
-                await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "status", CancellationToken.None);
                 socket.Dispose();
                 DependencyService.Get<DIForeground>().StopRun();
             }
